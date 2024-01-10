@@ -1,30 +1,41 @@
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>rp", ":%s/")
+local keymap = vim.keymap.set
+local opts = { noremap = true, silent = true }
 
-vim.keymap.set("n", "<C-s>", "<cmd>:w<CR>")
+keymap("n", "<Space>", "", opts)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+keymap("n", "<C-s>", "<cmd>:w<CR>", opts)
 
-vim.keymap.set("n", "J", "mzJ`z")
-
-vim.keymap.set("i", "<C-c>", "<Esc>")
-
-vim.keymap.set("x", "<leader>p", [["_dP]])
-
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
-
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-
-vim.keymap.set("n", "<C-h>", vim.cmd.TmuxNavigateLeft)
-vim.keymap.set("n", "<C-l>", vim.cmd.TmuxNavigateRight)
-vim.keymap.set("n", "<C-j>", vim.cmd.TmuxNavigateDown)
-vim.keymap.set("n", "<C-k>", vim.cmd.TmuxNavigateUp)
-
-vim.keymap.set("n", "<leader><leader>", function()
+keymap("n", "<leader><leader>", function()
   vim.cmd "so"
 end)
+keymap("n", "<C-Space>", "<cmd>WhichKey \\<space><cr>", opts)
+keymap("n", "<C-i>", "<C-i>", opts)
+
+-- Better window navigation
+keymap("n", "<m-h>", "<C-w>h", opts)
+keymap("n", "<m-j>", "<C-w>j", opts)
+keymap("n", "<m-k>", "<C-w>k", opts)
+keymap("n", "<m-l>", "<C-w>l", opts)
+keymap("n", "<m-tab>", "<c-6>", opts)
+
+keymap("n", "n", "nzz", opts)
+keymap("n", "N", "Nzz", opts)
+keymap("n", "*", "*zz", opts)
+keymap("n", "#", "#zz", opts)
+keymap("n", "g*", "g*zz", opts)
+keymap("n", "g#", "g#zz", opts)
+
+-- Stay in indent mode
+keymap("v", "<", "<gv", opts)
+keymap("v", ">", ">gv", opts)
+
+keymap("x", "p", [["_dP]])
+
+vim.cmd [[:amenu 10.100 mousemenu.Goto\ Definition <cmd>lua vim.lsp.buf.definition()<CR>]]
+vim.cmd [[:amenu 10.110 mousemenu.References <cmd>lua vim.lsp.buf.references()<CR>]]
+-- vim.cmd [[:amenu 10.120 mousemenu.-sep- *]]
+
+vim.keymap.set("n", "<RightMouse>", "<cmd>:popup mousemenu<CR>")
+vim.keymap.set("n", "<Tab>", "<cmd>:popup mousemenu<CR>")
