@@ -1,39 +1,34 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
-    local nvimtree = require "nvim-tree"
-
-    -- recommended settings from nvim-tree documentation
+    -- disable netrw at the very start of your init.lua
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
 
-    -- configure nvim-tree
-    nvimtree.setup {
-      view = {
-        width = 35,
+    -- set termguicolors to enable highlight groups
+    vim.opt.termguicolors = true
+
+    -- empty setup using defaults
+    require("nvim-tree").setup()
+
+    -- OR setup with some options
+    require("nvim-tree").setup {
+      sort = {
+        sorter = "case_sensitive",
       },
-      actions = {
-        open_file = {
-          window_picker = {
-            enable = false,
-          },
-        },
+      view = {
+        width = 40,
+      },
+      renderer = {
+        group_empty = true,
       },
       filters = {
-        custom = { ".DS_Store" },
-      },
-      git = {
-        ignore = false,
+        dotfiles = false,
       },
     }
 
-    -- set keymaps
-    local keymap = vim.keymap -- for conciseness
+    local keymap = vim.keymap.set
 
-    keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
-    keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" })
-    keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFile<CR>", { desc = "Find file in file explorer" })
-    keymap.set("n", "<leader>ee", "<cmd>NvimTreeFocus<CR>", { desc = "Focus file explorer" })
+    keymap("n", "<leader>e", vim.cmd.NvimTreeToggle)
   end,
 }

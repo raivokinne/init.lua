@@ -15,10 +15,11 @@ return {
     vim.keymap.set("n", "<C-e>", function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
     end)
-    vim.keymap.set("n", "<C-p>", function()
+
+    vim.keymap.set("n", "<C-s>", function()
       harpoon:list():prev()
     end)
-    vim.keymap.set("n", "<C-n>", function()
+    vim.keymap.set("n", "<C-w>", function()
       harpoon:list():next()
     end)
   end,

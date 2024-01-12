@@ -5,14 +5,13 @@ keymap("n", "<Space>", "", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-keymap("n", "<C-s>", "<cmd>:w<CR>", opts)
-
 keymap("n", "<leader><leader>", function()
   vim.cmd "so"
 end)
-keymap("n", "<C-Space>", "<cmd>WhichKey \\<space><cr>", opts)
 keymap("n", "<C-i>", "<C-i>", opts)
 
+keymap({ "n", "i", "v" }, "<C-z>", "u", opts)
+keymap({ "n", "i", "v" }, "<C-a>", "ggVG", opts)
 -- Better window navigation
 keymap("n", "<m-h>", "<C-w>h", opts)
 keymap("n", "<m-j>", "<C-w>j", opts)

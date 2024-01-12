@@ -54,5 +54,11 @@ return {
         [".*%.blade%.php"] = "blade",
       },
     }
+
+    vim.filetype.add {
+      pattern = {
+        [".*%.slint"] = "slint",
+      },
+    }
   end,
 }

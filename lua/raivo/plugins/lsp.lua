@@ -80,7 +80,12 @@ return {
       clangd = {},
       gopls = {},
       pyright = {},
-      rust_analyzer = {},
+      rust_analyzer = {
+        filetype = {
+          "rust",
+          "slint",
+        },
+      },
       tsserver = {},
       html = { filetypes = { "html", "twig", "hbs" } },
       intelephense = {},
@@ -121,6 +126,11 @@ return {
       dockerls = {},
       asm_lsp = {},
       cssmodules_ls = {},
+      slint_lsp = {
+        filetypes = {
+          "slint",
+        },
+      },
 
       lua_ls = {
         Lua = {
