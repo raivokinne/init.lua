@@ -79,33 +79,14 @@ return {
     local servers = {
       clangd = {},
       gopls = {},
-      pyright = {},
       rust_analyzer = {
         filetype = {
           "rust",
-          "slint",
         },
       },
       tsserver = {},
-      html = { filetypes = { "html", "twig", "hbs" } },
-      intelephense = {},
-      htmx = {
-        filetypes = {
-          "html",
-          "blade",
-          "php",
-          "rust",
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-          "vue",
-          "svelte",
-          "astro",
-          "go",
-          "template",
-        },
-      },
+      html = { filetypes = { "html", "twig", "hbs", "blade" } },
+      phpactor = {},
       emmet_ls = {
         filetypes = {
           "html",
@@ -122,16 +103,6 @@ return {
       cssls = {},
       jsonls = {},
       tailwindcss = {},
-      yamlls = {},
-      dockerls = {},
-      asm_lsp = {},
-      cssmodules_ls = {},
-      slint_lsp = {
-        filetypes = {
-          "slint",
-        },
-      },
-
       lua_ls = {
         Lua = {
           workspace = { checkThirdParty = false },
