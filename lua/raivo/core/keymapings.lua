@@ -6,7 +6,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 keymap("n", "<leader>pv", vim.cmd.Ex)
-keymap("n", "<leader><leader>", function()
+keymap("n", "<leader>so", function()
   vim.cmd "so"
 end)
 

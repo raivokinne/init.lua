@@ -1,8 +1,17 @@
 return {
-  "felipeagc/fleet-theme-nvim",
-  lazy = false, -- make sure we load this during startup if it is your main colorscheme
-  priority = 1000, -- make sure to load this before all the other start plugins
-  config = function()
-    vim.cmd.colorscheme "fleet"
+  "folke/tokyonight.nvim",
+  lazy = false,
+  priority = 1000,
+  opts = {
+    style = "moon",
+    transparent = true,
+    terminal_colors = true,
+    styles = {
+      sidebars = "transparent",
+      floats = "transparent",
+    },
+  },
+  init = function()
+    vim.cmd [[colorscheme tokyonight]]
   end,
 }

@@ -28,8 +28,6 @@ return {
     local on_attach = function(client, bufnr)
       local opts = { buffer = bufnr, remap = false }
 
-      client.server_capabilities.semanticTokensProvider = nil
-
       vim.keymap.set("n", "gd", function()
         vim.lsp.buf.definition()
       end, opts)
@@ -85,13 +83,12 @@ return {
         },
       },
       tsserver = {},
-      html = { filetypes = { "html", "twig", "hbs", "blade" } },
-      phpactor = {},
+      html = { filetypes = { "html" } },
+      intelephense = {},
       emmet_ls = {
         filetypes = {
           "html",
           "css",
-          "scss",
           "javascript",
           "javascriptreact",
           "typescript",
@@ -101,7 +98,6 @@ return {
         },
       },
       cssls = {},
-      jsonls = {},
       tailwindcss = {},
       lua_ls = {
         Lua = {
