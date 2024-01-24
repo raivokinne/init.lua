@@ -28,6 +28,8 @@ return {
     local on_attach = function(client, bufnr)
       local opts = { buffer = bufnr, remap = false }
 
+      client.server_capabilities.sementicTokensProvider = nil
+
       vim.keymap.set("n", "gd", function()
         vim.lsp.buf.definition()
       end, opts)

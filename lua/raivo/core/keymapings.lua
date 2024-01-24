@@ -25,4 +25,3 @@ keymap("v", ">", ">gv", opts)
 
 keymap("x", "p", [["_dP]])
 
-keymap("n", "<leader>r", ":source ~/.config/nvim/init.lua<CR>")
