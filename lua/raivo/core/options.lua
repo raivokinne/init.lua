@@ -1,21 +1,45 @@
-vim.opt.completeopt = { "menuone", "noselect" } -- mostly just for cmp
-vim.opt.hlsearch = true -- highlight all matches on previous search pattern
-vim.opt.ignorecase = true -- ignore case in search patterns
-vim.opt.smartindent = true -- make indenting smarter again
-vim.opt.termguicolors = true -- set term gui colors (most terminals support this)
-vim.opt.undofile = true -- enable persistent undo
-vim.opt.updatetime = 100 -- faster completion (4000ms default)
-vim.opt.expandtab = true -- convert tabs to spaces
-vim.opt.shiftwidth = 2 -- the number of spaces inserted for each indentation
-vim.opt.tabstop = 2 -- insert 2 spaces for a tab
-vim.opt.cursorline = true -- highlight the current line
-vim.opt.number = true -- set numbered lines
-vim.opt.relativenumber = true -- set relative numbered lines
-vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
-vim.opt.signcolumn = "yes" -- always show the sign column, otherwise it would shift the text each time
-vim.opt.wrap = false -- display lines as one long line
+vim.opt.guicursor = ""
+
+vim.opt.nu = true
+
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv "HOME" .. "/.vim/undodir"
+vim.opt.undofile = true
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
-vim.opt.sidescrolloff = 8
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.opt.signcolumn = "yes"
+vim.opt.isfname:append "@-@"
+
+vim.opt.updatetime = 50
+
+vim.g.netrw_banner = 0
+
 vim.opt.fillchars = { eob = " " }
+
+vim.opt.smartindent = true
+
+vim.opt.title = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.expandtab = true
+vim.opt.inccommand = "split"
+vim.opt.ignorecase = true
+vim.opt.smarttab = true
+vim.opt.breakindent = true
+vim.opt.wrap = false
+vim.opt.backspace = { "start", "eol", "indent" }
+vim.opt.path:append({ "**" })
+vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.splitkeep = "cursor"
+vim.opt.mouse = ""

@@ -1,0 +1,6 @@
+{
+    "diagnostics.globals": [
+        "fb_actions",
+        "actions"
+    ]
+}
