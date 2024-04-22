@@ -1,5 +1,16 @@
 vim.g.mapleader = " "
 
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+local TheRaivoGroup = augroup("Raivo", {})
+
+autocmd({ "BufWritePre" }, {
+  group = TheRaivoGroup,
+  pattern = "*",
+  command = [[%s/\s\+$//e]],
+})
+
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -13,4 +24,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({ { import = "raivo.plugins" }, { import = "raivo.plugins.lsp" } }, {})
+require("lazy").setup({
+  { import = "raivo.plugins" },
+  { import = "raivo.plugins.lsp" },
+}, {})
+
+vim.g.netrw_browse_split = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 25
