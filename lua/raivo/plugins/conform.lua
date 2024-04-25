@@ -18,6 +18,7 @@ return {
         yaml = { "prettier" },
         lua = { "stylua" },
         blade = { "blade-formatter" },
+        php = { "phpcbf", "pretty-php", "prettier" },
       },
       format_on_save = {
         lsp_fallback = true,

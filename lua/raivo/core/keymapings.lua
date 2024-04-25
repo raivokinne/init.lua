@@ -68,16 +68,14 @@ keymap.set("n", "<Leader>Q", ":qa<Return>", opts)
 keymap.set("n", "<Leader>f", ":NvimTreeFindFile<Return>", opts)
 keymap.set("n", "<Leader>t", ":NvimTreeToggle<Return>", opts)
 
--- Tabs
-keymap.set("n", "<leader>t", "<cmd>tabnew<cr>", opts)
-keymap.set("n", "<tab>", ":tabnext<Return>", opts)
-keymap.set("n", "<s-tab>", ":tabprev<Return>", opts)
-keymap.set("n", "<leader>T", ":tabclose<Return>", opts)
-keymap.set("n", "<leader>o", ":tabonly<Return>", opts)
-
 -- Split window
 keymap.set("n", "ss", ":split<Return>", opts)
 keymap.set("n", "sv", ":vsplit<Return>", opts)
+
+keymap.set("n", "sh", "<C-w>h")
+keymap.set("n", "sk", "<C-w>k")
+keymap.set("n", "sj", "<C-w>j")
+keymap.set("n", "sl", "<C-w>l")
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -85,3 +83,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 keymap.set("n", "<C-j>", function()
   vim.diagnostic.goto_next()
 end, opts)
+
+keymap.set("n", "<leader><leader>", function()
+  vim.cmd "so"
+end)

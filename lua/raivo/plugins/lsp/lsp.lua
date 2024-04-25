@@ -77,14 +77,11 @@ return {
 
     local servers = {
       gopls = {},
-      rust_analyzer = {
-        filetype = {
-          "rust",
-        },
-      },
       tsserver = {},
-      html = { filetypes = { "html" } },
-      phpactor = {},
+      html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
+      phpactor = {
+        filetypes = { "php" },
+      },
       emmet_ls = {
         filetypes = {
           "html",
@@ -100,7 +97,6 @@ return {
           "astro",
         },
       },
-      astro = {},
       cssls = {},
       tailwindcss = {},
       templ = {

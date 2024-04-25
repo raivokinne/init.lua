@@ -1,6 +1,9 @@
 return {
   "Exafunction/codeium.vim",
   event = "InsertEnter",
+  cmd = "Codeium",
+  build = ":Codeium Auth",
+  opts = {},
   dependencies = {
     "onsails/lspkind-nvim",
   },
