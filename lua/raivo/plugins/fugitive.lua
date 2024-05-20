@@ -1,5 +1,8 @@
 return {
   "tpope/vim-fugitive",
+  cmd = { "Git" },
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = { "tpope/vim-rhubarb" },
   config = function()
     vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
@@ -25,7 +28,7 @@ return {
           vim.cmd.Git { "pull", "--rebase" }
         end, opts)
 
-        vim.keymap.set("n", "<leader>t", ":Git push -u origin ", opts)
+        vim.keymap.set("n", "<leader>gp", ":Git push -u origin ", opts)
       end,
     })
 

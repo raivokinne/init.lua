@@ -1,20 +1,13 @@
 function SetColor(color)
-  color = color or "theme"
+  color = color or "tokyonight"
   vim.cmd.colorscheme(color)
-
-  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 return {
-  "rockerBOO/boo-colorscheme-nvim",
-  lazy = false,
-  priority = 1000,
-  config = function()
-    require("boo-colorscheme").use {
-      italic = false, -- toggle italics
-      theme = "boo",
-    }
-    SetColor "radioactive_waste"
+  "tiagovla/tokyodark.nvim",
+  opts = {},
+  config = function(_, opts)
+    require("tokyodark").setup(opts)
+    vim.cmd [[colorscheme tokyodark]]
   end,
 }

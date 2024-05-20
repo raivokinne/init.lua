@@ -77,11 +77,10 @@ return {
 
     local servers = {
       gopls = {},
+      denols = {},
       tsserver = {},
       html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
-      phpactor = {
-        filetypes = { "php" },
-      },
+      intelephense = {},
       emmet_ls = {
         filetypes = {
           "html",
@@ -97,6 +96,7 @@ return {
           "astro",
         },
       },
+      jsonls = {},
       cssls = {},
       tailwindcss = {},
       templ = {
