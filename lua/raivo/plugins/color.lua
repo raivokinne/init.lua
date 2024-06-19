@@ -41,5 +41,6 @@ return {
         config = function(_, opts)
             require("evergarden").setup(opts)
         end
-    }
+    },
 }
+

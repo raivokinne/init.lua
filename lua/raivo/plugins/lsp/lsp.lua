@@ -100,6 +100,19 @@ return {
             tsserver = {},
             html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
             intelephense = {},
+            elixirls = {},
+            cmake = {},
+            htmx = {},
+            jsonls = {},
+            jdtls = {
+                filetypes = { "java" },
+            },
+            zls = {
+                filetypes = { "zig" },
+            },
+            astro = {
+                filetypes = { "astro", "svelte", "php" },
+            },
             emmet_ls = {
                 filetypes = {
                     "html",
