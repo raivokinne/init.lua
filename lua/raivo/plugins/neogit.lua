@@ -13,6 +13,7 @@ return {
     },
   },
   config = function(_, opts)
+    -- like fetching branches with telescope or blaming with fugitive
     local neogit = require "neogit"
 
     neogit.setup(opts)

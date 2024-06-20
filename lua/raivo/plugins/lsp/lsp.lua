@@ -99,11 +99,11 @@ return {
             gopls = {},
             tsserver = {},
             html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
-            intelephense = {},
+            rust_analyzer = {},
+            phpactor = {},
             elixirls = {},
             cmake = {},
             htmx = {},
-            jsonls = {},
             jdtls = {
                 filetypes = { "java" },
             },
@@ -131,6 +131,11 @@ return {
             jsonls = {},
             cssls = {},
             tailwindcss = {},
+            slint_lsp = {
+                filetypes = {
+                    "slint",
+                },
+            },
             templ = {
                 filetypes = { "html", "templ" },
             },
@@ -157,6 +162,12 @@ return {
                     filetypes = (servers[server_name] or {}).filetypes,
                 }
             end,
+        }
+
+        vim.filetype.add {
+            extension = {
+                slint = "slint",
+            },
         }
 
         vim.diagnostic.config {

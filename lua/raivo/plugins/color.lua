@@ -4,7 +4,9 @@ return {
         branch = "stable",
         event = "UIEnter",
         config = function()
-            require("huez").setup({})
+            require("huez").setup()
+            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
             vim.keymap.set("n", "<leader>h", vim.cmd.Huez)
         end,
     },
@@ -23,24 +25,14 @@ return {
         end
     },
     {
-        'comfysage/evergarden',
-        priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
+        "rockerBOO/boo-colorscheme-nvim",
         lazy = false,
+        priority = 1000,
         opts = {
-            transparent_background = true,
-            contrast_dark = 'hard', -- 'hard'|'medium'|'soft'
-            overrides = {},         -- add custom overrides
-            style = {
-                tabline = { reverse = true, color = 'green' },
-                search = { reverse = false, inc_reverse = true },
-                types = { italic = false },
-                keyword = { italic = false },
-                comment = { italic = false },
-            },
+            italic = false,
         },
         config = function(_, opts)
-            require("evergarden").setup(opts)
+            require("boo-colorscheme").setup(opts)
         end
     },
 }
-
