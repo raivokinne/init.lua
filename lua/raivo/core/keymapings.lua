@@ -35,6 +35,9 @@ keymap.set("n", "<leader>tc", ":tabclose<Return>", opts)
 keymap.set("n", "<Tab>", ":tabnext<Return>", opts)
 keymap.set("n", "<S-Tab>", ":tabprev<Return>", opts)
 
+-- Terminal
+keymap.set("n", "<leader>tt", ":ToggleTerm size=10<Return>", opts)
+
 keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")

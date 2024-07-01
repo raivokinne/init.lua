@@ -23,7 +23,7 @@ vim.opt.termguicolors = true
 vim.opt.list = true
 vim.opt.listchars:append { tab = "» ", trail = "·", nbsp = "␣" }
 
-vim.opt.colorcolumn = "100"
+vim.opt.colorcolumn = "80"
 
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0

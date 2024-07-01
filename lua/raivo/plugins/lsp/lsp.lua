@@ -75,45 +75,33 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup()
 
-		local lsp_flags = {
-			debounce_text_changes = 150,
-		}
-
-		-- enable mason
-		require("lspconfig").kotlin_language_server.setup {
+		require'lspconfig'.gleam.setup({
+			cmd = { "gleam", "lsp" },
 			on_attach = on_attach,
-			flags = lsp_flags,
-			root_dir = util.root_pattern("build.gradle", "gradlew", "pom.xml", ".git"),
+			capabilities = capabilities,
+			flags = {
+				debounce_text_changes = 150,
+			},
+			filetypes = { "gleam" },
+			root_patterns = { "gleam.toml", ".git" },
 			settings = {
-				kotlin = {
-					compiler = {
-						jvmTarget = "17",
+				["gleam"] = {
+					analysis = {
+						experimental = {
+							enable = true,
+						},
 					},
 				},
 			},
-			capabilities = capabilities,
-		}
+		})
 
 		local servers = {
-			clangd = {},
 			gopls = {},
 			tsserver = {},
 			html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
 			rust_analyzer = {},
 			intelephense = {},
-			elixirls = {},
-			omnisharp = {},
-			cmake = {},
 			htmx = {},
-			jdtls = {
-				filetypes = { "java" },
-			},
-			zls = {
-				filetypes = { "zig" },
-			},
-			astro = {
-				filetypes = { "astro", "svelte", "php" },
-			},
 			emmet_ls = {
 				filetypes = {
 					"html",
@@ -132,11 +120,6 @@ return {
 			jsonls = {},
 			cssls = {},
 			tailwindcss = {},
-			slint_lsp = {
-				filetypes = {
-					"slint",
-				},
-			},
 			templ = {
 				filetypes = { "html", "templ" },
 			},
@@ -163,12 +146,6 @@ return {
 					filetypes = (servers[server_name] or {}).filetypes,
 				}
 			end,
-		}
-
-		vim.filetype.add {
-			extension = {
-				slint = "slint",
-			},
 		}
 
 		vim.diagnostic.config {

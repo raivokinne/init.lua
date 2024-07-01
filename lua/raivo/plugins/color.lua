@@ -24,33 +24,39 @@ return {
 		end,
 	},
 	{
-		"rose-pine/neovim",
-		name = "rose-pine",
+		"ramojus/mellifluous.nvim",
 		lazy = false,
 		priority = 1000,
 		opts = {
-			disable_italics = true,
-			disable_background = true,
-			disable_float_background = true,
+			transparent_background = {
+				enabled = false,
+				floating_windows = true,
+				telescope = true,
+				file_tree = true,
+				cursor_line = true,
+				status_line = false,
+			},
 		},
 		config = function(_, opts)
-			require("rose-pine").setup(opts)
+			require('mellifluous').setup(opts)
 		end,
 	},
 	{
-		"scottmckendry/cyberdream.nvim",
+		"tiagovla/tokyodark.nvim",
 		lazy = false,
 		priority = 1000,
 		opts = {
-			transparent = true,
+			transparent_background = true,
+			styles = {
+				comments = { italic = false }, -- style for comments
+				keywords = { italic = false }, -- style for keywords
+				identifiers = { italic = false }, -- style for identifiers
+				functions = { italic = false }, -- style for functions
+				variables = { italic = false }, -- style for variables
+			},
 		},
 		config = function(_, opts)
-			require("cyberdream").setup(opts)
+			require("tokyodark").setup(opts)
 		end,
-	},
-	{
-		"notken12/base46-colors",
-		lazy = false,
-		priority = 1000,
-	},
+	}
 }
