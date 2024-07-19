@@ -10,12 +10,8 @@ return {
 			local actions = require "telescope.actions"
 			require("telescope").setup {
 				defaults = {
-					layout_config = {
-						prompt_position = "top",
-						horizontal = {
-							preview_width = 0.55,
-						},
-					},
+					prompt_prefix = " ",
+					selection_caret = " ",
 					file_ignore_patterns = { "node_modules", ".git", ".cache", "__pycache__", "vendor" },
 					mappings = {
 						i = {
@@ -23,6 +19,11 @@ return {
 							["C-k"] = actions.move_selection_previous,
 						},
 					},
+				},
+				pickers = {
+					find_files = {
+						theme = "dropdown",
+					}
 				},
 				extensions = {
 					fzf = {

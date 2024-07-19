@@ -75,7 +75,7 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup()
 
-		require'lspconfig'.gleam.setup({
+		require 'lspconfig'.gleam.setup({
 			cmd = { "gleam", "lsp" },
 			on_attach = on_attach,
 			capabilities = capabilities,
@@ -96,8 +96,12 @@ return {
 		})
 
 		local servers = {
+			clangd = {},
 			gopls = {},
+			pyright = {},
 			tsserver = {},
+			csharp_ls = {},
+			zls = {},
 			html = { filetypes = { "html", "templ", "astro", "blade", "php" } },
 			rust_analyzer = {},
 			intelephense = {},

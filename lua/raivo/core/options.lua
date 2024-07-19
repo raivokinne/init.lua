@@ -20,11 +20,6 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.list = true
-vim.opt.listchars:append { tab = "» ", trail = "·", nbsp = "␣" }
-
-vim.opt.colorcolumn = "80"
-
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
@@ -37,6 +32,7 @@ vim.opt.updatetime = 50
 
 vim.opt.fillchars = { eob = " " }
 
-vim.opt.mouse = ""
-
 vim.opt.cursorline = true
+
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
