@@ -1,2 +1,1 @@
-require "raivo.lazy"
-require "raivo.core"
+require("raivo")

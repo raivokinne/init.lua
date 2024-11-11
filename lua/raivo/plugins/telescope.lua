@@ -4,11 +4,14 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      "SalOrak/whaler",
     },
     config = function()
       local builtin = require "telescope.builtin"
       local actions = require "telescope.actions"
-      require("telescope").setup {
+      local telescope = require "telescope"
+      telescope.load_extension "whaler"
+      telescope.setup {
         defaults = {
           prompt_prefix = " ",
           selection_caret = " ",
@@ -33,6 +36,11 @@ return {
             case_mode = "smart_case", -- or "ignore_case" or "respect_case"
             -- the default case_mode is "smart_case"
           },
+          whaler = {
+            -- Whaler configuration
+            directories = { "~/Projects", "~/personal", "~/school" },
+            -- You may also add directories that will not be searched for subdirectories
+          },
         },
       }
       vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
@@ -41,6 +49,7 @@ return {
         builtin.grep_string { search = vim.fn.input "  > Find Word:  " }
       end)
       vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
+      vim.keymap.set("n", "<leader>pd", telescope.extensions.whaler.whaler)
     end,
   },
   {
