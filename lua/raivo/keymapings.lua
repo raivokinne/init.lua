@@ -36,6 +36,10 @@ set("n", "<leader>d", "<cmd>%d<CR>")
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
 
+set("n", "<leader>f", function()
+	vim.lsp.buf.format()
+end)
+
 set("n", "<leader><leader>", function()
-  vim.cmd "so"
+	vim.cmd "so"
 end)

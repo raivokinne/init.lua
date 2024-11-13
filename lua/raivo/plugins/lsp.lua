@@ -7,13 +7,11 @@ return {
     { "williamboman/mason.nvim", config = true },
     "williamboman/mason-lspconfig.nvim",
     "folke/neodev.nvim",
-    "j-hui/fidget.nvim",
   },
   config = function()
     local cmp_nvim_lsp = require "cmp_nvim_lsp"
 
     require("neodev").setup()
-    require("fidget").setup()
     -- used to enable autocompletion (assign to every lsp server config)
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
