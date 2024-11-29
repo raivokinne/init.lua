@@ -1,6 +1,14 @@
 vim.opt.nu = true
 vim.opt.relativenumber = false
 vim.opt.guicursor = ""
+-- vim.g.loaded_netrw = 1 -- disable netrw
+-- vim.g.loaded_netrwPlugin = 1
+-- vim.opt.list = true
+-- vim.opt.listchars = {
+--   trail = "-",
+--   tab = "» ",
+--   space = "·",
+-- }
 
 vim.opt.tabstop = 3
 vim.opt.softtabstop = 3

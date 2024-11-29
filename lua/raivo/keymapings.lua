@@ -4,6 +4,7 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 
 set("n", "x", '"_x')
+set("n", "<leader>pv", vim.cmd.Ex)
 
 set("x", "<leader>p", [["_dP]])
 
@@ -37,9 +38,9 @@ set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
 
 set("n", "<leader>f", function()
-	vim.lsp.buf.format()
+  vim.lsp.buf.format()
 end)
 
 set("n", "<leader><leader>", function()
-	vim.cmd "so"
+  vim.cmd "so"
 end)

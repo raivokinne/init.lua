@@ -6,17 +6,14 @@ return {
     { "antosha417/nvim-lsp-file-operations", config = true },
     { "williamboman/mason.nvim", config = true },
     "williamboman/mason-lspconfig.nvim",
-    "folke/neodev.nvim",
+    "j-hui/fidget.nvim",
   },
   config = function()
     local cmp_nvim_lsp = require "cmp_nvim_lsp"
 
-    require("neodev").setup()
-    -- used to enable autocompletion (assign to every lsp server config)
+    require("fidget").setup {}
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
-    -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
     for type, icon in pairs(signs) do
       local hl = "DiagnosticSign" .. type
@@ -30,11 +27,12 @@ return {
       clangd = {},
       gopls = {},
       pyright = {},
-      tsserver = {},
+      ts_ls = {},
       zls = {},
       html = { filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" } },
+      ols = {},
       rust_analyzer = {},
-      intelephense = {},
+      phpactor = {},
       svelte = {},
       htmx = {
         filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" },
@@ -42,7 +40,7 @@ return {
       custom_elements_ls = {
         filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" },
       },
-      emmet_ls = {
+      emmet_language_server = {
         filetypes = {
           "htmldjango",
           "htmljinja",
