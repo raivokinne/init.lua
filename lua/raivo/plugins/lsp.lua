@@ -4,17 +4,28 @@ return {
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
-    { "williamboman/mason.nvim", config = true },
+    { "williamboman/mason.nvim",             config = true },
     "williamboman/mason-lspconfig.nvim",
-    "j-hui/fidget.nvim",
+    {
+      -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+      -- used for completion, annotations and signatures of Neovim apis
+      "folke/lazydev.nvim",
+      ft = "lua",
+      opts = {
+        library = {
+          -- Load luvit types when the `vim.uv` word is found
+          { path = "luvit-meta/library", words = { "vim%.uv" } },
+        },
+      },
+    },
+    { "Bilal2453/luvit-meta", lazy = true },
   },
   config = function()
     local cmp_nvim_lsp = require "cmp_nvim_lsp"
 
-    require("fidget").setup {}
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
-    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+    local signs = require("raivo.icons").diagnostics
     for type, icon in pairs(signs) do
       local hl = "DiagnosticSign" .. type
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
