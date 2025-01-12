@@ -1,7 +1,9 @@
 {
     "diagnostics.globals": [
         "fb_actions",
-        "actions"
+        "actions",
+        "Snacks",
+        "vim"
     ],
     "diagnostics.disable": [
         "duplicate-set-field"

@@ -4,9 +4,13 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 
 set("n", "x", '"_x')
-set("n", "<leader>pv", vim.cmd.Ex)
 
 set("x", "<leader>p", [["_dP]])
+
+set("n", "tt", ":tabnew<CR>")
+set("n", "<S-l>", ":tabnext<CR>")
+set("n", "<S-h>", ":tabprevious<CR>")
+set("n", "tc", ":tabclose<CR>");
 
 set({ "n", "v" }, "<leader>y", [["+y]])
 set({ "n", "v" }, "<leader>Y", [["+Y]])
