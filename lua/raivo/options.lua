@@ -5,13 +5,13 @@ vim.opt.guicursor = ""
 -- vim.g.loaded_netrwPlugin = 1
 -- vim.opt.list = true
 -- vim.opt.listchars = {
--- 	trail = "-",
--- 	tab = "» ",
+--   trail = "-",
+--   tab = "» ",
 -- }
 
-vim.opt.tabstop = 3
-vim.opt.softtabstop = 3
-vim.opt.shiftwidth = 3
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 vim.opt.expandtab = false
 
 vim.opt.smartindent = true

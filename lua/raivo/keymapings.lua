@@ -1,5 +1,6 @@
 local set = vim.keymap.set
 local opts = { noremap = true, silent = true }
+local map = vim.api.nvim_set_keymap
 
 vim.g.mapleader = " "
 
@@ -7,11 +8,12 @@ set("n", "x", '"_x')
 set("n", "-", vim.cmd.Ex)
 
 set("x", "<leader>p", [["_dP]])
+set("n", "<leader>ks", ":Screenkey toggle<CR>")
 
 set("n", "tt", ":tabnew<CR>")
 set("n", "<S-l>", ":tabnext<CR>")
 set("n", "<S-h>", ":tabprevious<CR>")
-set("n", "tc", ":tabclose<CR>");
+set("n", "tc", ":tabclose<CR>")
 
 set({ "n", "v" }, "<leader>y", [["+y]])
 set({ "n", "v" }, "<leader>Y", [["+Y]])
@@ -36,8 +38,6 @@ set("n", "<C-k>", "<cmd>cnext<CR>zz")
 set("n", "<C-j>", "<cmd>cprev<CR>zz")
 set("n", "<leader>k", "<cmd>lnext<CR>zz")
 set("n", "<leader>j", "<cmd>lprev<CR>zz")
-
-set("n", "<leader>d", "<cmd>%d<CR>")
 
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")

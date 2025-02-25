@@ -1,24 +1,19 @@
+function SetColor(color)
+	color = color or "rose-pine-moon"
+	vim.cmd.colorscheme(color)
+
+	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+end
+
 return {
-	{
-		"vague2k/huez.nvim",
-		-- if you want registry related features, uncomment this
-		-- import = "huez-manager.import"
-		branch = "stable",
-		event = "UIEnter",
-		config = function()
-			require("huez").setup({})
-			vim.keymap.set("n", "<leader>th", ":Huez<CR>")
-			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-		end,
-	},
 	{
 		"folke/tokyonight.nvim",
 		config = function()
-			require("tokyonight").setup({
+			require("tokyonight").setup {
 				-- your configuration comes here
 				-- or leave it empty to use the default settings
-				style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+				style = "storm",    -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
 				transparent = true, -- Enable this to disable setting the background color
 				terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
 				styles = {
@@ -30,21 +25,21 @@ return {
 					sidebars = "transparent", -- style for sidebars, see below
 					floats = "transparent", -- style for floating windows
 				},
-			})
-		end
+			}
+		end,
 	},
-
 	{
 		"rose-pine/neovim",
 		name = "rose-pine",
 		config = function()
-			require('rose-pine').setup({
+			require("rose-pine").setup {
 				styles = {
-					italic = false,
 					bold = false,
+					italic = false,
 					transparency = true,
 				},
-			})
-		end
+			}
+			SetColor()
+		end,
 	},
 }
