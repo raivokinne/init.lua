@@ -2,23 +2,6 @@ return { -- Highlight, edit, and navigate code
 	'nvim-treesitter/nvim-treesitter',
 	build = ':TSUpdate',
 	main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-	dependencies = {
-		{
-			'windwp/nvim-ts-autotag',
-			opts = {
-				opts = {
-					enable_close = true,
-					enable_rename = true,
-					enable_close_on_slash = false,
-				},
-				per_filetype = {
-					['html'] = {
-						enable_close = false,
-					},
-				},
-			},
-		},
-	},
 	-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 	opts = {
 		ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },

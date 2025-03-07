@@ -18,6 +18,7 @@ return {
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			-- 'nvimtools/none-ls.nvim',
 			{ "j-hui/fidget.nvim",       opts = {} },
+			"liuchengxu/vista.vim"
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -43,6 +44,7 @@ return {
 					map("gk", "<CMD>lua vim.diagnostic.goto_prev()<CR>", "Diag go to prev", { "n" })
 
 					local client = assert(vim.lsp.get_client_by_id(event.data.client_id), "must have valid client")
+					client.server_capabilities.semanticTokensProvider = nil
 
 					if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
 						local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
@@ -61,13 +63,6 @@ return {
 							end,
 						})
 					end
-
-					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-						map("<leader>th", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-						end, "[T]oggle Inlay [H]ints")
-					end
-					client.server_capabilities.semanticTokensProvider = nil
 				end,
 			})
 
@@ -104,6 +99,7 @@ return {
 				},
 
 				rust_analyzer = {},
+				csharp_ls = {},
 
 				zls = {
 					server_capabilities = {
@@ -207,6 +203,11 @@ return {
 						},
 					},
 				},
+			}
+
+
+			require'lspconfig'.gdscript.setup{
+
 			}
 
 			require("mason").setup()

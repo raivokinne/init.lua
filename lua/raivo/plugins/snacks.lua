@@ -6,15 +6,16 @@ return {
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = true },
+    -- indent = { enabled = true },
     input = { enabled = true },
     notifier = {
       enabled = true,
       timeout = 3000,
     },
-    picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    words = { enabled = true },
+    scroll = { enabled = true },
+    statuscolumn = { enabled = true },
     styles = {
       notification = {
         -- wo = { wrap = true } -- Wrap notifications
@@ -22,31 +23,29 @@ return {
     }
   },
   keys = {
-    { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
-    { "<leader>sC", function() Snacks.picker.commands() end, desc = "Commands" },
-    { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
-    { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
-    { "<leader>sM", function() Snacks.picker.man() end, desc = "Man Pages" },
-    { "<leader>sp", function() Snacks.picker.lazy() end, desc = "Search for Plugin Spec" },
-    { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
     { "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+    { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+    { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+    { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+    { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+    { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
     { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+    { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
+    { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
     { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
       callback = function()
-        -- Setup some globals for debugging (lazy-loaded)
         _G.dd = function(...)
           Snacks.debug.inspect(...)
         end
         _G.bt = function()
           Snacks.debug.backtrace()
         end
-        vim.print = _G.dd -- Override print to use snacks for `:=` command
+        vim.print = _G.dd
 
-        -- Create some toggle mappings
         Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
         Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
         Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
