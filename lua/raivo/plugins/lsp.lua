@@ -1,235 +1,305 @@
 return {
-	{
-		"folke/lazydev.nvim",
-		ft = "lua",
-		opts = {
-			library = {
-				{ path = "luvit-meta/library", words = { "vim%.uv" } },
-			},
-		},
-	},
-	{ "Bilal2453/luvit-meta", lazy = true },
-	{
-		-- Main LSP Configuration
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			{ "williamboman/mason.nvim", config = true },
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			-- 'nvimtools/none-ls.nvim',
-			{ "j-hui/fidget.nvim",       opts = {} },
-			"liuchengxu/vista.vim"
-		},
-		config = function()
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-				callback = function(event)
-					local map = function(keys, func, desc, mode)
-						mode = mode or "n"
-						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-					end
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      {
+        -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+        -- used for completion, annotations and signatures of Neovim apis
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+          library = {
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "luvit-meta/library", words = { "vim%.uv" } },
+            { path = "/usr/share/awesome/lib/", words = { "awesome" } },
+          },
+        },
+      },
+      { "Bilal2453/luvit-meta", lazy = true },
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
 
-					map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-					map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-					map("K", vim.lsp.buf.hover, "Buf Hover")
-					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-					map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-					map("<leader>k", vim.diagnostic.open_float, "Check error")
-					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-					map("gj", "<CMD>lua vim.diagnostic.goto_next()<CR>", "Diag go to next", { "n" })
-					map("gk", "<CMD>lua vim.diagnostic.goto_prev()<CR>", "Diag go to prev", { "n" })
+      { "j-hui/fidget.nvim", opts = {} },
+      { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 
-					local client = assert(vim.lsp.get_client_by_id(event.data.client_id), "must have valid client")
-					client.server_capabilities.semanticTokensProvider = nil
+      { "elixir-tools/elixir-tools.nvim" },
 
-					if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-						local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+      -- Autoformatting
+      "stevearc/conform.nvim",
 
-						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-							buffer = event.buf,
-							group = highlight_augroup,
-							callback = vim.lsp.buf.clear_references,
-						})
+      -- Schema information
+      "b0o/SchemaStore.nvim",
+    },
+    config = function()
+      -- Don't do LSP stuff if we're in Obsidian Edit mode
+      if vim.g.obsidian then
+        return
+      end
 
-						vim.api.nvim_create_autocmd("LspDetach", {
-							group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-							callback = function(event2)
-								vim.lsp.buf.clear_references()
-								vim.api.nvim_clear_autocmds { group = "kickstart-lsp-highlight", buffer = event2.buf }
-							end,
-						})
-					end
-				end,
-			})
+      local extend = function(name, key, values)
+        local mod = require(string.format("lspconfig.configs.%s", name))
+        local default = mod.default_config
+        local keys = vim.split(key, ".", { plain = true })
+        while #keys > 0 do
+          local item = table.remove(keys, 1)
+          default = default[item]
+        end
 
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
+        if vim.islist(default) then
+          for _, value in ipairs(default) do
+            table.insert(values, value)
+          end
+        else
+          for item, value in pairs(default) do
+            if not vim.tbl_contains(values, item) then
+              values[item] = value
+            end
+          end
+        end
+        return values
+      end
 
-			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+      local capabilities = nil
+      if pcall(require, "cmp_nvim_lsp") then
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      end
 
-			-- Enable the following language servers
-			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-			--
-			--  Add any additional override configuration in the following tables. Available keys are:
-			--  - cmd (table): Override the default command used to start the server
-			--  - filetypes (table): Override the default list of associated filetypes for the server
-			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-			--  - settings (table): Override the default settings passed when initializing the server.
-			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-			local servers = {
-				clangd = {},
+      local lspconfig = require "lspconfig"
 
-				gopls = {
-					settings = {
-						gopls = {
-							hints = {
-								assignVariableTypes = true,
-								compositeLiteralFields = true,
-								compositeLiteralTypes = true,
-								constantValues = true,
-								functionTypeParameters = true,
-								parameterNames = true,
-								rangeVariableTypes = true,
-							},
-						},
-					},
-				},
+      lspconfig.sourcekit.setup {
+        capabilities = {
+          workspace = {
+            didChangeWatchedFiles = {
+              dynamicRegistration = true,
+            },
+          },
+        },
+      }
 
-				rust_analyzer = {},
-				csharp_ls = {},
+      local servers = {
+        bashls = true,
+        gopls = {
+          manual_install = true,
+          settings = {
+            gopls = {
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+              },
+            },
+          },
+        },
+        lua_ls = {
+          server_capabilities = {
+            semanticTokensProvider = vim.NIL,
+          },
+        },
+        rust_analyzer = true,
+        svelte = true,
+        templ = true,
+        taplo = true,
+        -- phpactor = true,
 
-				zls = {
-					server_capabilities = {
-						semanticTokensProvider = vim.NIL,
-					},
-				},
+        pyright = true,
+        ruff = { manual_install = true },
+        -- mojo = { manual_install = true },
 
-				vtsls = {
-					init_options = {
-						plugins = {
-							{
-								name = "@vue/typescript-plugin",
-								location = require("mason-registry").get_package("vue-language-server"):get_install_path(),
-								languages = { "vue" },
-							},
-						},
-					},
-					filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-					server_capabilities = {
-						documentFormattingProvider = false,
-						semanticTokensProvider = vim.NIL,
-					},
-					settings = {
-						typescript = {
-							preferences = {
-								importModuleSpecifier = "non-relative",
-							},
-						},
-					},
-				},
+        -- Enabled biome formatting, turn off all the other ones generally
+        biome = true,
+        -- ts_ls = {
+        --   root_dir = require("lspconfig").util.root_pattern "package.json",
+        --   single_file = false,
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
+        vtsls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+        },
+        -- denols = true,
+        jsonls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+          settings = {
+            json = {
+              schemas = require("schemastore").json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
 
-				volar = {
-					server_capabilities = {
-						semanticTokensProvider = false,
-					},
-					filetypes = { "vue" },
-					init_options = {
-						vue = {
-							hybridMode = false,
-						},
-					},
-				},
+        -- cssls = {
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
 
-				svelte = {},
+        yamlls = {
+          settings = {
+            yaml = {
+              schemaStore = {
+                enable = false,
+                url = "",
+              },
+              -- schemas = require("schemastore").yaml.schemas(),
+            },
+          },
+        },
 
-				eslint = {
-					on_init = function(client)
-						local util = require "lspconfig.util"
-						local eslintrc =
-							 util.root_pattern(".eslintrc", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.json")(vim.fn.getcwd())
-						if not eslintrc then
-							client.stop()
-							return
-						end
-					end,
-				},
+        ols = {},
+        racket_langserver = { manual_install = true },
+        roc_ls = { manual_install = true },
 
-				html = {},
+        ocamllsp = true,
 
-				jsonls = {},
+        gleam = {
+          manual_install = true,
+        },
 
-				cssls = {
-					settings = {
-						css = {
-							validate = true,
-							lint = {
-								unknownAtRules = "ignore",
-							},
-						},
-					},
-				},
+        -- elixirls = {
+        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
+        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+        --   -- server_capabilities = {
+        --   --   -- completionProvider = true,
+        --   --   definitionProvider = true,
+        --   --   documentFormattingProvider = false,
+        --   -- },
+        -- },
 
-				tailwindcss = {
-					filetypes = {
-						"html",
-						"vue",
-						"svelte",
-						"javascriptreact",
-						"typescriptreact",
-					},
-				},
+        lexical = {
+          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
+          root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+          server_capabilities = {
+            completionProvider = vim.NIL,
+            definitionProvider = true,
+          },
+        },
 
-				dockerls = {},
+        clangd = {
+          -- cmd = { "clangd", unpack(require("custom.clangd").flags) },
+          -- TODO: Could include cmd, but not sure those were all relevant flags.
+          --    looks like something i would have added while i was floundering
+          init_options = { clangdFileStatus = true },
 
-				docker_compose_language_service = {},
+          filetypes = { "c" },
+        },
 
-				elixirls = {},
+        tailwindcss = {
+          init_options = {
+            userLanguages = {
+              elixir = "phoenix-heex",
+              eruby = "erb",
+              heex = "phoenix-heex",
+            },
+          },
+          filetypes = extend("tailwindcss", "filetypes", { "ocaml.mlx" }),
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  [[class: "([^"]*)]],
+                  [[className="([^"]*)]],
+                },
+              },
+              includeLanguages = extend("tailwindcss", "settings.tailwindCSS.includeLanguages", {
+                ["ocaml.mlx"] = "html",
+              }),
+            },
+          },
+        },
+      }
 
-				lua_ls = {
-					-- cmd = {...},
-					-- filetypes = { ...},
-					-- capabilities = {},
-					server_capabilities = {
-						semanticTokensProvider = vim.NIL,
-					},
-					settings = {
-						Lua = {
-							completion = {
-								callSnippet = "Replace",
-							},
-						},
-					},
-				},
-			}
+      local servers_to_install = vim.tbl_filter(function(key)
+        local t = servers[key]
+        if type(t) == "table" then
+          return not t.manual_install
+        else
+          return t
+        end
+      end, vim.tbl_keys(servers))
 
+      require("mason").setup()
+      local ensure_installed = {
+        "stylua",
+        "lua_ls",
+        "delve",
+        -- "tailwind-language-server",
+      }
 
-			require'lspconfig'.gdscript.setup{
+      vim.list_extend(ensure_installed, servers_to_install)
+      require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
-			}
+      for name, config in pairs(servers) do
+        if config == true then
+          config = {}
+        end
+        config = vim.tbl_deep_extend("force", {}, {
+          capabilities = capabilities,
+        }, config)
 
-			require("mason").setup()
+        lspconfig[name].setup(config)
+      end
 
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
-			})
-			require("mason-tool-installer").setup { ensure_installed = ensure_installed }
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
-			require("mason-lspconfig").setup {
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
-			}
-		end,
-	},
+          local settings = servers[client.name]
+          if type(settings) ~= "table" then
+            settings = {}
+          end
+
+          local builtin = require "telescope.builtin"
+
+          vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
+          vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
+          vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
+          vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+
+          vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
+          vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
+          vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
+
+          client.server_capabilities.semanticTokensProvider = nil
+
+          -- Override server capabilities
+          if settings.server_capabilities then
+            for k, v in pairs(settings.server_capabilities) do
+              if v == vim.NIL then
+                ---@diagnostic disable-next-line: cast-local-type
+                v = nil
+              end
+
+              client.server_capabilities[k] = v
+            end
+          end
+        end,
+      })
+
+      require("raivo.autoformat").setup()
+
+      require("lsp_lines").setup()
+      vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+
+      vim.keymap.set("", "<leader>l", function()
+        local config = vim.diagnostic.config() or {}
+        if config.virtual_text then
+          vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+        else
+          vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+        end
+      end, { desc = "Toggle lsp_lines" })
+    end,
+  },
 }

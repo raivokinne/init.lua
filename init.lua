@@ -1,1 +1,1 @@
-require("raivo")
+require "raivo"
