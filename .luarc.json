@@ -8,6 +8,8 @@
     "diagnostics.disable": [
         "duplicate-set-field",
         "deprecated",
-        "undefined-field"
+        "undefined-field",
+        "undefined-doc-name",
+        "cast-local-type"
     ]
 }

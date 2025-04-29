@@ -12,6 +12,7 @@ return {
             -- Load luvit types when the `vim.uv` word is found
             { path = "luvit-meta/library", words = { "vim%.uv" } },
             { path = "/usr/share/awesome/lib/", words = { "awesome" } },
+            { path = "snacks.nvim", words = { "Snacks" } },
           },
         },
       },
@@ -104,7 +105,8 @@ return {
         svelte = true,
         templ = true,
         taplo = true,
-        -- phpactor = true,
+        -- intelephense = true,
+        phpactor = true,
 
         pyright = true,
         ruff = { manual_install = true },
@@ -270,8 +272,6 @@ return {
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
           vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
-
-          client.server_capabilities.semanticTokensProvider = nil
 
           -- Override server capabilities
           if settings.server_capabilities then
