@@ -1,7 +1,6 @@
 require "raivo.keymapings"
 require "raivo.options"
 require "raivo.lazy"
-require "raivo.terminal"
 
 vim.g.mapleader = " "
 

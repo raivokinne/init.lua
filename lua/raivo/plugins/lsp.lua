@@ -26,9 +26,6 @@ return {
 
       { "elixir-tools/elixir-tools.nvim" },
 
-      -- Autoformatting
-      "stevearc/conform.nvim",
-
       -- Schema information
       "b0o/SchemaStore.nvim",
     },
@@ -286,8 +283,6 @@ return {
           end
         end,
       })
-
-      require("raivo.autoformat").setup()
 
       require("lsp_lines").setup()
       vim.diagnostic.config { virtual_text = true, virtual_lines = false }

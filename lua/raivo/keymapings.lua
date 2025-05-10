@@ -1,6 +1,5 @@
 local set = vim.keymap.set
 local opts = { noremap = true, silent = true }
-local map = vim.api.nvim_set_keymap
 
 vim.g.mapleader = " "
 
