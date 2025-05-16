@@ -12,7 +12,6 @@ return {
             -- Load luvit types when the `vim.uv` word is found
             { path = "luvit-meta/library", words = { "vim%.uv" } },
             { path = "/usr/share/awesome/lib/", words = { "awesome" } },
-            { path = "snacks.nvim", words = { "Snacks" } },
           },
         },
       },
@@ -30,7 +29,6 @@ return {
       "b0o/SchemaStore.nvim",
     },
     config = function()
-      -- Don't do LSP stuff if we're in Obsidian Edit mode
       if vim.g.obsidian then
         return
       end
@@ -65,16 +63,6 @@ return {
 
       local lspconfig = require "lspconfig"
 
-      lspconfig.sourcekit.setup {
-        capabilities = {
-          workspace = {
-            didChangeWatchedFiles = {
-              dynamicRegistration = true,
-            },
-          },
-        },
-      }
-
       local servers = {
         bashls = true,
         gopls = {
@@ -99,15 +87,10 @@ return {
           },
         },
         rust_analyzer = true,
-        svelte = true,
         templ = true,
-        taplo = true,
-        -- intelephense = true,
         phpactor = true,
 
         pyright = true,
-        ruff = { manual_install = true },
-        -- mojo = { manual_install = true },
 
         -- Enabled biome formatting, turn off all the other ones generally
         biome = true,
@@ -136,11 +119,11 @@ return {
           },
         },
 
-        -- cssls = {
-        --   server_capabilities = {
-        --     documentFormattingProvider = false,
-        --   },
-        -- },
+        cssls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+        },
 
         yamlls = {
           settings = {
@@ -158,31 +141,9 @@ return {
         racket_langserver = { manual_install = true },
         roc_ls = { manual_install = true },
 
-        ocamllsp = true,
-
         gleam = {
           manual_install = true,
         },
-
-        -- elixirls = {
-        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
-        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-        --   -- server_capabilities = {
-        --   --   -- completionProvider = true,
-        --   --   definitionProvider = true,
-        --   --   documentFormattingProvider = false,
-        --   -- },
-        -- },
-
-        lexical = {
-          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
-          root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-          server_capabilities = {
-            completionProvider = vim.NIL,
-            definitionProvider = true,
-          },
-        },
-
         clangd = {
           -- cmd = { "clangd", unpack(require("custom.clangd").flags) },
           -- TODO: Could include cmd, but not sure those were all relevant flags.
@@ -248,8 +209,13 @@ return {
         lspconfig[name].setup(config)
       end
 
+      local disable_semantic_tokens = {
+        lua = true,
+      }
+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
+          local bufnr = args.buf
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
           local settings = servers[client.name]
@@ -269,6 +235,11 @@ return {
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
           vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
+
+          local filetype = vim.bo[bufnr].filetype
+          if disable_semantic_tokens[filetype] then
+            client.server_capabilities.semanticTokensProvider = nil
+          end
 
           -- Override server capabilities
           if settings.server_capabilities then
