@@ -23,10 +23,10 @@ return {
       { "j-hui/fidget.nvim", opts = {} },
       { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 
-      { "elixir-tools/elixir-tools.nvim" },
-
       -- Schema information
       "b0o/SchemaStore.nvim",
+
+		"stevearc/conform.nvim",
     },
     config = function()
       if vim.g.obsidian then
@@ -66,7 +66,6 @@ return {
       local servers = {
         bashls = true,
         gopls = {
-          manual_install = true,
           settings = {
             gopls = {
               hints = {
@@ -137,13 +136,6 @@ return {
           },
         },
 
-        ols = {},
-        racket_langserver = { manual_install = true },
-        roc_ls = { manual_install = true },
-
-        gleam = {
-          manual_install = true,
-        },
         clangd = {
           -- cmd = { "clangd", unpack(require("custom.clangd").flags) },
           -- TODO: Could include cmd, but not sure those were all relevant flags.
@@ -255,6 +247,7 @@ return {
         end,
       })
 
+	require("raivo.autoformat").setup()
       require("lsp_lines").setup()
       vim.diagnostic.config { virtual_text = true, virtual_lines = false }
 
