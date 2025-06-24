@@ -1,0 +1,41 @@
+local data = assert(vim.fn.stdpath "data") --[[@as string]]
+
+require("telescope").setup {
+  defaults = {
+    file_ignore_patterns = { "dune.lock" },
+  },
+  extensions = {
+    wrap_results = true,
+
+    fzf = {},
+    history = {
+      path = vim.fs.joinpath(data, "telescope_history.sqlite3"),
+      limit = 100,
+    },
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {},
+    },
+  },
+}
+
+pcall(require("telescope").load_extension, "fzf")
+pcall(require("telescope").load_extension, "smart_history")
+pcall(require("telescope").load_extension, "ui-select")
+
+local builtin = require "telescope.builtin"
+
+vim.keymap.set("n", "<space>pf", builtin.find_files)
+vim.keymap.set("n", "<space>pG", function()
+  return builtin.git_files { cwd = vim.fn.expand "%:h" }
+end)
+vim.keymap.set("n", "<space>ph", builtin.help_tags)
+vim.keymap.set("n", "<space>pg", require "raivo.telescope.multi-ripgrep")
+vim.keymap.set("n", "<space>pb", builtin.buffers)
+vim.keymap.set("n", "<space>/", builtin.current_buffer_fuzzy_find)
+
+vim.keymap.set("n", "<space>gw", builtin.grep_string)
+
+vim.keymap.set("n", "<space>pa", function()
+  ---@diagnostic disable-next-line: param-type-mismatch
+  builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath "data", "lazy") }
+end)
