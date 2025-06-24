@@ -3,16 +3,6 @@ local setup = function()
   local conform = require "conform"
   conform.setup {
     formatters = {
-<<<<<<< HEAD
-      ["ml-format"] = {
-        command = "./_build/_private/default/.dev-tool/ocamlformat/ocamlformat/target/bin/ocamlformat",
-        args = {
-          "--enable-outside-detected-project",
-          "--name",
-          "$FILENAME",
-          "-",
-        },
-=======
       php = {
         command = "php-cs-fixer",
         args = {
@@ -22,18 +12,14 @@ local setup = function()
           "--allow-risky=yes", -- if you have risky stuff in config, if not you dont need it.
         },
         stdin = false,
->>>>>>> 14296ee (update)
       },
     },
     formatters_by_ft = {
       lua = { "stylua" },
       blade = { "blade-formatter" },
-<<<<<<< HEAD
       ocaml = { "ml-format" },
       ocaml_mlx = { "ocamlformat_mlx" },
-=======
       php = { "pint", "php_cs_fixer" },
->>>>>>> 14296ee (update)
     },
   }
 
@@ -62,11 +48,6 @@ local setup = function()
       end
 
       if ft == "ocaml.mlx" then
-<<<<<<< HEAD
-        -- Hmmm... this is a little weird,
-        -- it seems like it should be automatic, but that's OK
-=======
->>>>>>> 14296ee (update)
         require("conform").format {
           bufnr = args.buf,
           formatters = { "ocamlformat_mlx" },

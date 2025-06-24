@@ -181,9 +181,6 @@ return {
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          local bufnr = args.buf
-      vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
           local settings = servers[client.name]
