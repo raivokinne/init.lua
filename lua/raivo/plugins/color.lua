@@ -1,17 +1,19 @@
 return {
-  "slugbyte/lackluster.nvim",
-  lazy = false,
+  "rose-pine/neovim",
+  lazy = true,
   priority = 1000,
-  config = function()
-    local lackluster = require "lackluster"
-    lackluster.setup {
-      tweak_background = {
-        normal = "none", -- main background
-        telescope = "none", -- telescope
-        menu = "none", -- nvim_cmp, wildmenu ... (bad idea to transparent)
-        popup = "none", -- lazy, mason, whichkey ... (bad idea to transparent)
-      },
-    }
-    vim.cmd.colorscheme "lackluster-mint"
+  name = "rose-pine",
+  opts = {
+    styles = {
+      italic = false,
+      bold = true,
+      transparency = true,
+    },
+  },
+  config = function(_, opts)
+    require("rose-pine").setup(opts)
+  end,
+  init = function()
+    vim.cmd [[colorscheme rose-pine-moon]]
   end,
 }

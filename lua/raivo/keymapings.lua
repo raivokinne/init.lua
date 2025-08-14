@@ -41,11 +41,13 @@ set("n", "<leader>j", "<cmd>lprev<CR>zz")
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
 
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>f", function()
+set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+
+set("n", "<C-f>", "<cmd>silent !tmux neww ~/.local/bin/tmux-sessionizer<CR>")
+set("n", "<leader>f", function()
   require("conform").format { bufnr = 0 }
 end)
 
-vim.keymap.set("n", "<leader><leader>", function()
+set("n", "<leader><leader>", function()
   vim.cmd "so"
 end)
