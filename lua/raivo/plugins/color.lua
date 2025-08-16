@@ -1,19 +1,11 @@
 return {
-  "rose-pine/neovim",
-  lazy = true,
+  "zenbones-theme/zenbones.nvim",
+  dependencies = "rktjmp/lush.nvim",
+  lazy = false,
   priority = 1000,
-  name = "rose-pine",
-  opts = {
-    styles = {
-      italic = false,
-      bold = true,
-      transparency = true,
-    },
-  },
-  config = function(_, opts)
-    require("rose-pine").setup(opts)
-  end,
-  init = function()
-    vim.cmd [[colorscheme rose-pine-moon]]
+  config = function()
+    vim.cmd.colorscheme "rosebones"
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
   end,
 }

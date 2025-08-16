@@ -1,25 +1,9 @@
 local setup = function()
-  -- Autoformatting Setup
   local conform = require "conform"
   conform.setup {
-    formatters = {
-      php = {
-        command = "php-cs-fixer",
-        args = {
-          "fix",
-          "$FILENAME",
-          "--config=/your/path/to/config/file/[filename].php",
-          "--allow-risky=yes", -- if you have risky stuff in config, if not you dont need it.
-        },
-        stdin = false,
-      },
-    },
     formatters_by_ft = {
       lua = { "stylua" },
       blade = { "blade-formatter" },
-      ocaml = { "ml-format" },
-      ocaml_mlx = { "ocamlformat_mlx" },
-      php = { "pint", "php_cs_fixer" },
     },
   }
 
@@ -42,16 +26,6 @@ local setup = function()
           lsp_fallback = false,
           quiet = true,
           async = true,
-        }
-
-        return
-      end
-
-      if ft == "ocaml.mlx" then
-        require("conform").format {
-          bufnr = args.buf,
-          formatters = { "ocamlformat_mlx" },
-          lsp_fallback = false,
         }
 
         return
