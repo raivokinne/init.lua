@@ -4,7 +4,6 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 
 set("n", "x", '"_x')
-set("n", "-", vim.cmd.Ex)
 
 set("x", "<leader>p", [["_dP]])
 
@@ -26,6 +25,11 @@ set("n", "<Leader>Q", ":qa<Return>", opts)
 
 set("n", "ss", ":split<Return>", opts)
 set("n", "sv", ":vsplit<Return>", opts)
+
+set("n", "sj", "<c-w><c-j>")
+set("n", "sk", "<c-w><c-k>")
+set("n", "sl", "<c-w><c-l>")
+set("n", "sh", "<c-w><c-h>")
 
 set("n", "<C-k>", "<cmd>cnext<CR>zz")
 set("n", "<C-j>", "<cmd>cprev<CR>zz")
