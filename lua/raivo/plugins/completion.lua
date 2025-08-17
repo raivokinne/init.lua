@@ -1,25 +1,64 @@
 return {
-  "hrsh7th/nvim-cmp",
-  lazy = false,
-  priority = 100,
+  "saghen/blink.cmp",
+  event = "VimEnter",
+  version = "1.*",
   dependencies = {
-    "onsails/lspkind.nvim",
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-buffer",
-    { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-    "saadparwaiz1/cmp_luasnip",
-    "roobert/tailwindcss-colorizer-cmp.nvim",
     {
-      "supermaven-inc/supermaven-nvim",
-      config = function()
-        require("supermaven-nvim").setup {
-          -- disable_inline_completion = true,
-        }
-      end,
+      "L3MON4D3/LuaSnip",
+      version = "2.*",
+      build = (function()
+        if vim.fn.has "win32" == 1 or vim.fn.executable "make" == 0 then
+          return
+        end
+        return "make install_jsregexp"
+      end)(),
+      dependencies = {
+        {
+          "rafamadriz/friendly-snippets",
+          config = function()
+            require("luasnip.loaders.from_vscode").lazy_load()
+          end,
+        },
+      },
+      opts = {},
     },
+    "folke/lazydev.nvim",
   },
-  config = function()
-    require "raivo.completion"
-  end,
+  --- @module 'blink.cmp'
+  --- @type blink.cmp.Config
+  opts = {
+    keymap = {
+      ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<C-e>"] = { "hide" },
+      ["<C-y>"] = { "select_and_accept" },
+
+      ["<Up>"] = { "select_prev", "fallback" },
+      ["<Down>"] = { "select_next", "fallback" },
+      ["<C-k>"] = { "select_prev", "fallback_to_mappings" },
+      ["<C-j>"] = { "select_next", "fallback_to_mappings" },
+
+      ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+      ["<Tab>"] = { "snippet_forward", "fallback" },
+      ["<S-Tab>"] = { "snippet_backward", "fallback" },
+    },
+    appearance = {
+      nerd_font_variant = "mono",
+    },
+    completion = {
+      documentation = { auto_show = false, auto_show_delay_ms = 500 },
+    },
+
+    sources = {
+      default = { "lsp", "path", "snippets", "lazydev" },
+      providers = {
+        lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
+      },
+    },
+
+    snippets = { preset = "luasnip" },
+    fuzzy = { implementation = "lua" },
+    signature = { enabled = true },
+  },
 }

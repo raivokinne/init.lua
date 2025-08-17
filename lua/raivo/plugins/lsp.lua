@@ -21,10 +21,6 @@ return {
       "WhoIsSethDaniel/mason-tool-installer.nvim",
 
       { "j-hui/fidget.nvim", opts = {} },
-      { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
-
-      -- Autoformatting
-      "stevearc/conform.nvim",
 
       -- Schema information
       "b0o/SchemaStore.nvim",
@@ -59,8 +55,8 @@ return {
       end
 
       local capabilities = nil
-      if pcall(require, "cmp_nvim_lsp") then
-        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      if pcall(require, "blink-cmp") then
+        capabilities = require("blink-cmp").get_lsp_capabilities()
       end
 
       local lspconfig = require "lspconfig"
@@ -290,19 +286,7 @@ return {
         end,
       })
 
-      require("raivo.autoformat").setup()
-
-      require("lsp_lines").setup()
       vim.diagnostic.config { virtual_text = true, virtual_lines = false }
-
-      vim.keymap.set("", "<leader>l", function()
-        local config = vim.diagnostic.config() or {}
-        if config.virtual_text then
-          vim.diagnostic.config { virtual_text = false, virtual_lines = true }
-        else
-          vim.diagnostic.config { virtual_text = true, virtual_lines = false }
-        end
-      end, { desc = "Toggle lsp_lines" })
     end,
   },
 }
