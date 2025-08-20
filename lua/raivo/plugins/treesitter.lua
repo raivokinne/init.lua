@@ -1,9 +1,5 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = {
-    "nvim-treesitter/playground",
-    { "reasonml-editor/tree-sitter-reason" },
-  },
   build = ":TSUpdate",
   opts = {
     ensure_installed = {
