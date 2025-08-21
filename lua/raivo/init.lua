@@ -37,6 +37,7 @@ autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
     local opts = { buffer = bufnr, remap = false }
+
     vim.keymap.set("n", "gd", function()
       vim.lsp.buf.definition()
     end, opts)

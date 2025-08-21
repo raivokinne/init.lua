@@ -14,43 +14,62 @@ return {
     end
 
     local servers = {
-      gopls = {},
+      bashls = true,
+      clangd = {
+        manual_install = true,
+        cmd = { "/usr/bin/clangd" },
+        init_options = { clangdFileStatus = true },
+        filetypes = { "c", "cpp" },
+      },
+      ocamllsp = {
+        manual_install = true,
+        cmd = { "ocamllsp" },
+        settings = {
+          codelens = { enable = true },
+          inlayHints = { enable = true },
+          syntaxDocumentation = { enable = true },
+        },
+
+        server_capabilities = { semanticTokensProvider = false },
+      },
+      gopls = {
+        manual_install = true,
+        settings = {
+          gopls = {
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+          },
+        },
+      },
       pyright = {},
-      ts_ls = {},
+      vtsls = {
+        server_capabilities = {
+          documentFormattingProvider = false,
+        },
+      },
       zls = {},
-      html = { filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" } },
       ols = {},
       rust_analyzer = {},
       phpactor = {},
       svelte = {},
-      htmx = {
-        filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" },
-      },
-      custom_elements_ls = {
-        filetypes = { "htmldjango", "htmljinja", "html", "templ", "astro", "blade", "php" },
-      },
-      emmet_language_server = {
-        filetypes = {
-          "htmldjango",
-          "htmljinja",
-          "html",
-          "css",
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-          "blade",
-          "php",
-          "templ",
-          "svelte",
-          "astro",
-        },
-      },
       jsonls = {},
-      cssls = {},
+      taplo = true,
       tailwindcss = {},
+      biome = true,
+      ruff = { manual_install = true },
       templ = {
         filetypes = { "html", "templ" },
+      },
+      elixirls = {
+        cmd = { "/home/raivo/.local/share/nvim/mason/bin/elixir-ls" },
+        root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
       },
       lua_ls = {
         Lua = {

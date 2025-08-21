@@ -4,7 +4,7 @@ return {
     require("trouble").setup {
       icons = false,
     }
-    vim.keymap.set("n", "<leader>tt", function()
+    vim.keymap.set("n", "<leader>xx", function()
       require("trouble").toggle()
     end)
     vim.keymap.set("n", "[t", function()

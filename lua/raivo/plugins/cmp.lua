@@ -1,24 +1,28 @@
 return {
   {
-    "hrsh7th/cmp-nvim-lsp",
-  },
-  {
-    "hrsh7th/cmp-nvim-lsp-signature-help",
-  },
-  {
-    "L3MON4D3/LuaSnip",
+    "hrsh7th/nvim-cmp",
     dependencies = {
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
+      {
+        "supermaven-inc/supermaven-nvim",
+        config = function()
+          require("supermaven-nvim").setup {
+            -- disable_inline_completion = true,
+          }
+        end,
+      },
     },
-  },
-  {
-    "hrsh7th/nvim-cmp",
     config = function()
       local luasnip = require "luasnip"
       local cmp = require "cmp"
       require("luasnip.loaders.from_vscode").lazy_load()
-
       cmp.setup {
         preselect = cmp.PreselectMode.None,
         snippet = {
@@ -59,6 +63,7 @@ return {
           { name = "nvim_lsp_signature_help" }, -- function arg popups while typing
           { name = "buffer" },
           { name = "path" }, -- file system paths
+          { name = "supermaven" },
         },
       }
     end,
