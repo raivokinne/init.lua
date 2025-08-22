@@ -6,6 +6,8 @@ vim.opt.listchars = {
   eol = "↲",
 }
 
+vim.opt.guicursor = ""
+
 vim.opt.cursorline = true
 
 vim.opt.nu = true

@@ -10,14 +10,6 @@ return {
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
-      {
-        "supermaven-inc/supermaven-nvim",
-        config = function()
-          require("supermaven-nvim").setup {
-            -- disable_inline_completion = true,
-          }
-        end,
-      },
     },
     config = function()
       local luasnip = require "luasnip"

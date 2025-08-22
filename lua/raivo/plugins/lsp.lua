@@ -19,7 +19,6 @@ return {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     { "j-hui/fidget.nvim", opts = {} },
-    "stevearc/conform.nvim",
   },
   config = function()
     local lspconfig = require "lspconfig"
@@ -122,7 +121,5 @@ return {
 
       lspconfig[name].setup(config)
     end
-
-    require("raivo.autoformat").setup()
   end,
 }
