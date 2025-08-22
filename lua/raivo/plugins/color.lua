@@ -1,13 +1,19 @@
 return {
-    "vague2k/vague.nvim",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other plugins
-    config = function()
-        require("vague").setup {
-            transparent = true,
-            italic = false,
-        }
-
-        vim.cmd [[colorscheme vague]]
-    end,
+  "https://gitlab.com/motaz-shokry/gruvbox.nvim",
+  name = "gruvbox",
+  lazy = false,
+  priority = 1000,
+  opts = {
+    styles = {
+      bold = true,
+      italic = false,
+      transparency = true,
+    },
+  },
+  config = function(_, opts)
+    require("gruvbox").setup(opts)
+  end,
+  init = function()
+    vim.cmd "colorscheme gruvbox"
+  end,
 }

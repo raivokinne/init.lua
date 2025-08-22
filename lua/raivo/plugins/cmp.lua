@@ -63,7 +63,6 @@ return {
           { name = "nvim_lsp_signature_help" }, -- function arg popups while typing
           { name = "buffer" },
           { name = "path" }, -- file system paths
-          { name = "supermaven" },
         },
       }
     end,
