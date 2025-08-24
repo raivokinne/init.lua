@@ -1,41 +1,43 @@
-vim.o.list = true
-vim.opt.listchars = {
-  tab = "» ",
-  trail = "·",
-  nbsp = "␣",
-  eol = "↲",
-}
+local opt = vim.opt
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-vim.opt.guicursor = ""
+opt.winborder = "rounded"
 
-vim.opt.cursorline = true
+opt.cursorline = true
 
-vim.opt.nu = true
-vim.opt.relativenumber = true
+opt.inccommand = "split"
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+opt.smartcase = true
+opt.ignorecase = true
 
-vim.opt.smartindent = true
+opt.number = true
+opt.relativenumber = true
 
-vim.opt.wrap = false
+opt.splitbelow = true
+opt.splitright = true
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv "HOME" .. "/.vim/undodir"
-vim.opt.undofile = true
+opt.signcolumn = "yes"
+opt.shada = { "'10", "<0", "s10", "h" }
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
+opt.formatoptions:remove "o"
 
-vim.opt.termguicolors = true
+opt.wrap = true
+opt.linebreak = true
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append "@-@"
+opt.tabstop = 4
+opt.shiftwidth = 4
 
-vim.opt.updatetime = 50
+opt.more = false
 
-vim.opt.colorcolumn = "80"
+opt.foldmethod = "manual"
+
+opt.title = true
+opt.titlestring = '%t%( %M%)%( (%{expand("%:~:h")})%)%a (nvim)'
+
+opt.undofile = true
+
+opt.swapfile = false
+opt.backup = false
+opt.undodir = os.getenv "HOME" .. "/.vim/undodir"
+opt.undofile = true
