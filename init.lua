@@ -25,7 +25,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 
-vim.keymap.set('n', '-', vim.cmd.Ex)
+-- vim.keymap.set('n', '-', vim.cmd.Ex)
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -132,6 +132,7 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
 
       'saghen/blink.cmp',
+      'b0o/SchemaStore.nvim',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -226,53 +227,192 @@ require('lazy').setup({
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+      local lspconfig = require 'lspconfig'
 
-        lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
+      local servers = {
+        zls = {},
+        bashls = true,
+        gopls = {
+          manual_install = true,
           settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
+            gopls = {
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
+        glsl_analyzer = true,
+        lua_ls = {
+          cmd = { 'lua-language-server' },
+          -- server_capabilities = {
+          --   semanticTokensProvider = vim.NIL,
+          -- },
+        },
+        rust_analyzer = true,
+        svelte = true,
+        templ = true,
+        taplo = true,
+        intelephense = {
+          settings = {
+            intelephense = {
+              format = {
+                braces = 'k&r',
+              },
+            },
+          },
+        },
+
+        pyright = true,
+        ruff = { manual_install = true },
+        -- mojo = { manual_install = true },
+
+        -- Enabled biome formatting, turn off all the other ones generally
+        biome = true,
+        astro = true,
+        -- ts_ls = {
+        --   root_dir = require("lspconfig").util.root_pattern "package.json",
+        --   single_file = false,
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
+        vtsls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+        },
+        -- denols = true,
+        jsonls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+
+        -- cssls = {
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
+
+        yamlls = {
+          settings = {
+            yaml = {
+              schemaStore = {
+                enable = false,
+                url = '',
+              },
+              -- schemas = require("schemastore").yaml.schemas(),
+            },
+          },
+        },
+
+        ols = {},
+        racket_langserver = { manual_install = true },
+        roc_ls = { manual_install = true },
+
+        ocamllsp = {
+          manual_install = true,
+          -- cmd = { "dune", "tools", "exec", "ocamllsp" },
+          -- cmd = { "dune", "exec", "ocamllsp" },
+          cmd = { 'ocamllsp' },
+          settings = {
+            codelens = { enable = true },
+            inlayHints = { enable = true },
+            syntaxDocumentation = { enable = true },
+          },
+
+          server_capabilities = { semanticTokensProvider = false },
+
+          -- TODO: Check if i still need the filtypes stuff i had before
+        },
+
+        gleam = {
+          manual_install = true,
+        },
+
+        elixirls = {
+          cmd = { '/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls' },
+          root_dir = require('lspconfig.util').root_pattern { 'mix.exs' },
+        },
+
+        -- lexical = {
+        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
+        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+        --   server_capabilities = {
+        --     completionProvider = vim.NIL,
+        --     definitionProvider = true,
+        --   },
+        -- },
+
+        clangd = {
+          manual_install = true,
+          filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+        },
+
+        tailwindcss = {
+          init_options = {
+            userLanguages = {
+              elixir = 'phoenix-heex',
+              eruby = 'erb',
+              heex = 'phoenix-heex',
+            },
+          },
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  [[class: "([^"]*)]],
+                  [[className="([^"]*)]],
+                },
+              },
             },
           },
         },
       }
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-      })
+      local servers_to_install = vim.tbl_filter(function(key)
+        local t = servers[key]
+        if type(t) == 'table' then
+          return not t.manual_install
+        else
+          return t
+        end
+      end, vim.tbl_keys(servers))
+
+      require('mason').setup()
+      local ensure_installed = {
+        'stylua',
+        'lua_ls',
+        'delve',
+        -- "tailwind-language-server",
+      }
+
+      vim.list_extend(ensure_installed, servers_to_install)
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      for name, config in pairs(servers) do
+        if config == true then
+          config = {}
+        end
+        config = vim.tbl_deep_extend('force', {}, {
+          capabilities = capabilities,
+        }, config)
+
+        lspconfig[name].setup(config)
+      end
     end,
   },
 
@@ -363,7 +503,7 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
@@ -395,7 +535,38 @@ require('lazy').setup({
         bold = true,
         italic = false,
       }
-      vim.cmd 'colorscheme vague'
+      -- vim.cmd 'colorscheme vague'
+    end,
+  },
+
+  {
+    'https://gitlab.com/motaz-shokry/gruvbox.nvim',
+    name = 'gruvbox',
+    priority = 1000,
+    config = function()
+      require('gruvbox').setup {
+        variant = 'hard', -- hard, medium, soft, light
+        dark_variant = 'medium', -- hard, medium, soft
+        dim_inactive_windows = false,
+        extend_background_behind_borders = false,
+
+        enable = {
+          terminal = true,
+          legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
+          migrations = true, -- Handle deprecated options automatically
+        },
+        styles = {
+          bold = true,
+          italic = false,
+          transparency = true,
+        },
+      }
+
+      vim.cmd 'colorscheme gruvbox'
+      -- vim.cmd("colorscheme gruvbox-hard")
+      -- vim.cmd("colorscheme gruvbox-medium")
+      -- vim.cmd("colorscheme gruvobx-soft")
+      -- vim.cmd("colorscheme gruvobx-light")
     end,
   },
 
@@ -410,7 +581,7 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
-        style = 'moon',
+        style = 'night',
         transparent = true,
         styles = {
           comments = { italic = true }, -- Disable italics in comments
