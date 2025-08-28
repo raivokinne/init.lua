@@ -1,6 +1,5 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
@@ -20,8 +19,7 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
-vim.opt.colorcolumn = "80"
--- vim.opt.cursorline = true
+vim.opt.cursorline = true
 
 vim.keymap.set("n", "-", vim.cmd.Ex)
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -141,7 +139,7 @@ require("lazy").setup({
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
 			"hrsh7th/nvim-cmp",
-			"L3MON4D3/LuaSnip",
+			{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 			"saadparwaiz1/cmp_luasnip",
 			"j-hui/fidget.nvim",
 		},
@@ -276,6 +274,7 @@ require("lazy").setup({
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" }, -- For luasnip users.
+					{ name = "path" },
 				}, {
 					{ name = "buffer" },
 				}),
@@ -295,25 +294,36 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"rose-pine/neovim",
-		name = "rose-pine",
-		lazy = false,
+		"https://gitlab.com/motaz-shokry/gruvbox.nvim",
+		name = "gruvbox",
 		priority = 1000,
-		opts = {
-			styles = {
-				italic = false,
-				bold = true,
-				transparency = true,
-			},
-		},
-		config = function(_, opts)
-			require("rose-pine").setup(opts)
-		end,
-		init = function()
-			vim.cmd.colorscheme("rose-pine")
+		config = function()
+			require("gruvbox").setup({
+				variant = "hard", -- hard, medium, soft, light
+				dark_variant = "medium", -- hard, medium, soft
+				dim_inactive_windows = false,
+				extend_background_behind_borders = false,
+
+				enable = {
+					terminal = true,
+					legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
+					migrations = true, -- Handle deprecated options automatically
+				},
+				styles = {
+					bold = true,
+					italic = false,
+					transparency = true,
+				},
+			})
+
+			vim.cmd("colorscheme gruvbox")
+			-- vim.cmd("colorscheme gruvbox-hard")
+			-- vim.cmd("colorscheme gruvbox-medium")
+			-- vim.cmd("colorscheme gruvobx-soft")
+			-- vim.cmd("colorscheme gruvobx-light")
 		end,
 	},
-	{ -- Highlight, edit, and navigate code
+	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs", -- Sets main module to use for opts
