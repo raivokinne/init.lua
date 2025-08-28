@@ -67,25 +67,8 @@ require('lazy').setup({
 		'nvim-telescope/telescope.nvim',
 		dependencies = {
 			'nvim-lua/plenary.nvim',
-			{
-				'nvim-telescope/telescope-fzf-native.nvim',
-				build = 'make',
-				cond = function()
-					return vim.fn.executable 'make' == 1
-				end,
-			},
-			{ 'nvim-telescope/telescope-ui-select.nvim' },
 		},
 		config = function()
-			require('telescope').setup {
-				extensions = {
-					['ui-select'] = {
-						require('telescope.themes').get_dropdown(),
-					},
-				},
-			}
-			pcall(require('telescope').load_extension, 'fzf')
-			pcall(require('telescope').load_extension, 'ui-select')
 			local builtin = require 'telescope.builtin'
 			vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
 			vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
@@ -493,20 +476,6 @@ require('lazy').setup({
 		  vim.cmd.colorscheme 'rose-pine'
 		end,
 	},
-	{
-		"vague2k/vague.nvim",
-		lazy = false, -- make sure we load this during startup if it is your main colorscheme
-		priority = 1000, -- make sure to load this before all the other plugins
-		config = function()
-			require("vague").setup({
-				transparent = true, -- don't set background
-				-- disable bold/italic globally in `style`
-				bold = true,
-				italic = false,
-			})
-			-- vim.cmd("colorscheme vague")
-		end
-	},
 	{ -- Highlight, edit, and navigate code
 		'nvim-treesitter/nvim-treesitter',
 		build = ':TSUpdate',
@@ -523,7 +492,28 @@ require('lazy').setup({
 			indent = { enable = true, disable = { 'ruby' } },
 		},
 	},
-	{ import = 'custom.plugins' },
+	{
+		'folke/trouble.nvim',
+		opts = {},
+		cmd = 'Trouble',
+		keys = {
+			{
+				'<leader>xx',
+				'<cmd>Trouble diagnostics toggle<cr>',
+				desc = 'Diagnostics (Trouble)',
+			},
+			{
+				'[t',
+				'<cmd>Trouble prev<cr>',
+				desc = 'Previous (Trouble)',
+			},
+			{
+				']t',
+				'<cmd>Trouble next<cr>',
+				desc = 'Next (Trouble)',
+			},
+		},
+	},
 }, {
 		ui = {
 			icons = vim.g.have_nerd_font and {} or {
