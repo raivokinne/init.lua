@@ -2,29 +2,36 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.opt.guicursor = ""
-vim.opt.cursorline = true
-vim.opt.inccommand = 'split'
-vim.opt.smartcase = true
-vim.opt.ignorecase = true
-vim.opt.number = true
+
+vim.opt.nu = true
 vim.opt.relativenumber = true
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.signcolumn = 'yes'
-vim.opt.shada = { "'10", '<0', 's10', 'h' }
-vim.opt.formatoptions:remove 'o'
-vim.opt.wrap = false
-vim.opt.linebreak = true
+
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.more = true
-vim.opt.foldmethod = 'manual'
-vim.opt.title = true
-vim.opt.titlestring = '%t%( %M%)%( (%{expand("%:~:h")})%)%a (nvim)'
-vim.opt.undofile = true
+vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+
+vim.opt.wrap = false
+
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+vim.opt.termguicolors = true
+
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+vim.opt.isfname:append("@-@")
+
+vim.opt.updatetime = 50
+
+vim.opt.colorcolumn = "80"
 
 vim.keymap.set('n', '-', vim.cmd.Ex)
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -40,6 +47,10 @@ vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww ~/.local/bin/tmux-sessioniz
 vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+
+local augroup = vim.api.nvim_create_augroup
+local RaivoGroup = augroup('Raivo', {})
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -70,9 +81,6 @@ require('lazy').setup({
 					prompt_title = 'Live Grep in Open Files',
 				}
 			end, { desc = '[S]earch [/] in Open Files' })
-			vim.keymap.set('n', '<leader>pc', function()
-				builtin.find_files { cwd = vim.fn.stdpath 'config' }
-			end, { desc = '[S]earch [N]eovim files' })
 		end,
 	},
 	{
@@ -88,22 +96,19 @@ require('lazy').setup({
 		},
 		config = function()
 			vim.api.nvim_create_autocmd('LspAttach', {
-				group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
-				callback = function(event)
-					local map = function(keys, func, desc, mode)
-						mode = mode or 'n'
-						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
-					end
-
-					map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-					map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-					map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-					map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-					map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-					map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-					map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-					map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-					map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+				group = RaivoGroup,
+				callback = function(e)
+					local opts = { buffer = e.buf }
+					vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+					vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+					vim.keymap.set("n", "<leader>ws", function() vim.lsp.buf.workspace_symbol() end, opts)
+					vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+					vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+					vim.keymap.set("n", "<leader>rr", function() vim.lsp.buf.references() end, opts)
+					vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
+					vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+					vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+					vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
 				end,
 			})
 
@@ -359,22 +364,4 @@ require('lazy').setup({
 			},
 		},
 	},
-}, {
-		ui = {
-			icons = vim.g.have_nerd_font and {} or {
-				cmd = '⌘',
-				config = '🛠',
-				event = '📅',
-				ft = '📂',
-				init = '⚙',
-				keys = '🗝',
-				plugin = '🔌',
-				runtime = '💻',
-				require = '🌙',
-				source = '📄',
-				start = '🚀',
-				task = '📌',
-				lazy = '💤 ',
-			},
-		},
-	})
+})
