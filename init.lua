@@ -41,14 +41,6 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-	desc = 'Highlight when yanking (copying) text',
-	group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-	callback = function()
-		vim.hl.on_yank()
-	end,
-})
-
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -93,7 +85,6 @@ require('lazy').setup({
 			{ 'j-hui/fidget.nvim', opts = {} },
 
 			'saghen/blink.cmp',
-			'b0o/SchemaStore.nvim',
 		},
 		config = function()
 			vim.api.nvim_create_autocmd('LspAttach', {
@@ -113,78 +104,8 @@ require('lazy').setup({
 					map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
 					map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
 					map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
-
-					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-					---@param client vim.lsp.Client
-					---@param method vim.lsp.protocol.Method
-					---@param bufnr? integer some lsp support methods only in specific files
-					---@return boolean
-					local function client_supports_method(client, method, bufnr)
-						if vim.fn.has 'nvim-0.11' == 1 then
-							return client:supports_method(method, bufnr)
-						else
-							return client.supports_method(method, { bufnr = bufnr })
-						end
-					end
-
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-						local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-						vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-							buffer = event.buf,
-							group = highlight_augroup,
-							callback = vim.lsp.buf.document_highlight,
-						})
-
-						vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-							buffer = event.buf,
-							group = highlight_augroup,
-							callback = vim.lsp.buf.clear_references,
-						})
-
-						vim.api.nvim_create_autocmd('LspDetach', {
-							group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-							callback = function(event2)
-								vim.lsp.buf.clear_references()
-								vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-							end,
-						})
-					end
-
-					if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-						map('<leader>th', function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-						end, '[T]oggle Inlay [H]ints')
-					end
 				end,
 			})
-
-			vim.diagnostic.config {
-				severity_sort = true,
-				float = { border = 'rounded', source = 'if_many' },
-				underline = { severity = vim.diagnostic.severity.ERROR },
-				signs = vim.g.have_nerd_font and {
-					text = {
-						[vim.diagnostic.severity.ERROR] = '󰅚 ',
-						[vim.diagnostic.severity.WARN] = '󰀪 ',
-						[vim.diagnostic.severity.INFO] = '󰋽 ',
-						[vim.diagnostic.severity.HINT] = '󰌶 ',
-					},
-				} or {},
-				virtual_text = {
-					source = 'if_many',
-					spacing = 2,
-					format = function(diagnostic)
-						local diagnostic_message = {
-							[vim.diagnostic.severity.ERROR] = diagnostic.message,
-							[vim.diagnostic.severity.WARN] = diagnostic.message,
-							[vim.diagnostic.severity.INFO] = diagnostic.message,
-							[vim.diagnostic.severity.HINT] = diagnostic.message,
-						}
-						return diagnostic_message[diagnostic.severity]
-					end,
-				},
-			}
 
 			local capabilities = require('blink.cmp').get_lsp_capabilities()
 
@@ -209,12 +130,8 @@ require('lazy').setup({
 						},
 					},
 				},
-				glsl_analyzer = true,
 				lua_ls = {
 					cmd = { 'lua-language-server' },
-					-- server_capabilities = {
-					--   semanticTokensProvider = vim.NIL,
-					-- },
 				},
 				rust_analyzer = true,
 				svelte = true,
@@ -229,21 +146,7 @@ require('lazy').setup({
 						},
 					},
 				},
-
 				pyright = true,
-				ruff = { manual_install = true },
-				-- mojo = { manual_install = true },
-
-				-- Enabled biome formatting, turn off all the other ones generally
-				biome = true,
-				astro = true,
-				-- ts_ls = {
-				--   root_dir = require("lspconfig").util.root_pattern "package.json",
-				--   single_file = false,
-				--   server_capabilities = {
-				--     documentFormattingProvider = false,
-				--   },
-				-- },
 				vtsls = {
 					server_capabilities = {
 						documentFormattingProvider = false,
@@ -254,20 +157,7 @@ require('lazy').setup({
 					server_capabilities = {
 						documentFormattingProvider = false,
 					},
-					settings = {
-						json = {
-							schemas = require('schemastore').json.schemas(),
-							validate = { enable = true },
-						},
-					},
 				},
-
-				-- cssls = {
-				--   server_capabilities = {
-				--     documentFormattingProvider = false,
-				--   },
-				-- },
-
 				yamlls = {
 					settings = {
 						yaml = {
@@ -275,19 +165,14 @@ require('lazy').setup({
 								enable = false,
 								url = '',
 							},
-							-- schemas = require("schemastore").yaml.schemas(),
 						},
 					},
 				},
-
 				ols = {},
 				racket_langserver = { manual_install = true },
 				roc_ls = { manual_install = true },
-
 				ocamllsp = {
 					manual_install = true,
-					-- cmd = { "dune", "tools", "exec", "ocamllsp" },
-					-- cmd = { "dune", "exec", "ocamllsp" },
 					cmd = { 'ocamllsp' },
 					settings = {
 						codelens = { enable = true },
@@ -296,28 +181,11 @@ require('lazy').setup({
 					},
 
 					server_capabilities = { semanticTokensProvider = false },
-
-					-- TODO: Check if i still need the filtypes stuff i had before
 				},
-
-				gleam = {
-					manual_install = true,
-				},
-
 				elixirls = {
 					cmd = { '/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls' },
 					root_dir = require('lspconfig.util').root_pattern { 'mix.exs' },
 				},
-
-				-- lexical = {
-				--   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
-				--   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-				--   server_capabilities = {
-				--     completionProvider = vim.NIL,
-				--     definitionProvider = true,
-				--   },
-				-- },
-
 				clangd = {
 					manual_install = true,
 					filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
@@ -386,9 +254,6 @@ require('lazy').setup({
 				'L3MON4D3/LuaSnip',
 				version = '2.*',
 				build = (function()
-					-- Build Step is needed for regex support in snippets.
-					-- This step is not supported in many windows environments.
-					-- Remove the below condition to re-enable on windows.
 					if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
 						return
 					end
@@ -426,14 +291,10 @@ require('lazy').setup({
 			},
 
 			appearance = {
-				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-				-- Adjusts spacing to ensure icons are aligned
 				nerd_font_variant = 'mono',
 			},
 
 			completion = {
-				-- By default, you may press `<c-space>` to show the documentation.
-				-- Optionally, set `auto_show = true` to show the documentation after a delay.
 				documentation = { auto_show = true, auto_show_delay_ms = 500 },
 			},
 
@@ -442,39 +303,23 @@ require('lazy').setup({
 			},
 
 			snippets = { preset = 'luasnip' },
-
-			-- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-			-- which automatically downloads a prebuilt binary when enabled.
-			--
-			-- By default, we use the Lua implementation instead, but you may enable
-			-- the rust implementation via `'prefer_rust_with_warning'`
-			--
-			-- See :h blink-cmp-config-fuzzy for more information
 			fuzzy = { implementation = 'lua' },
-
-			-- Shows a signature help window while you type arguments for a function
 			signature = { enabled = true },
 		},
 	},
-
 	{
-		'rose-pine/neovim',
-		name = 'rose-pine',
-		lazy = false,
-		priority = 1000,
-		opts = {
-			styles = {
-				italic = false,
+		"vague2k/vague.nvim",
+		lazy = false, -- make sure we load this during startup if it is your main colorscheme
+		priority = 1000, -- make sure to load this before all the other plugins
+		config = function()
+			require("vague").setup({
+				transparent = true, -- don't set background
+				-- disable bold/italic globally in `style`
 				bold = true,
-				transparency = true,
-			},
-		},
-		config = function(_, opts)
-			require('rose-pine').setup(opts)
-		end,
-		init = function()
-		  vim.cmd.colorscheme 'rose-pine'
-		end,
+				italic = false,
+			})
+			vim.cmd("colorscheme vague")
+		end
 	},
 	{ -- Highlight, edit, and navigate code
 		'nvim-treesitter/nvim-treesitter',
