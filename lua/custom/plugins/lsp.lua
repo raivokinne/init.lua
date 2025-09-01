@@ -12,6 +12,7 @@ return {
 		{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 		"saadparwaiz1/cmp_luasnip",
 		"j-hui/fidget.nvim",
+		{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 		{
 			"folke/lazydev.nvim",
 			ft = "lua",
@@ -83,6 +84,14 @@ return {
 					})
 					vim.g.zig_fmt_parse_errors = 0
 					vim.g.zig_fmt_autosave = 0
+				end,
+				clangd = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.clangd.setup({
+						cmd = { "clangd", "--background-index" },
+						capabilities = capabilities,
+						root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git"),
+					})
 				end,
 				["lua_ls"] = function()
 					local lspconfig = require("lspconfig")
@@ -156,16 +165,16 @@ return {
 			}),
 		})
 
-		vim.diagnostic.config({
-			-- update_in_insert = true,
-			float = {
-				focusable = false,
-				style = "minimal",
-				border = "rounded",
-				source = "always",
-				header = "",
-				prefix = "",
-			},
-		})
+		require("lsp_lines").setup()
+		vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
+
+		vim.keymap.set("", "<leader>l", function()
+			local config = vim.diagnostic.config() or {}
+			if config.virtual_text then
+				vim.diagnostic.config({ virtual_text = false, virtual_lines = true })
+			else
+				vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
+			end
+		end, { desc = "Toggle lsp_lines" })
 	end,
 }
