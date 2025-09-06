@@ -2,6 +2,12 @@ return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
 	main = "nvim-treesitter.configs", -- Sets main module to use for opts
+	dependencies = {
+		{
+			"HiPhish/rainbow-delimiters.nvim",
+			event = "VeryLazy",
+		},
+	},
 	opts = {
 		ensure_installed = {
 			"bash",

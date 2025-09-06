@@ -1,23 +1,48 @@
-vim.opt.cursorline = true
-vim.opt.inccommand = "split"
-vim.opt.smartcase = true
-vim.opt.ignorecase = true
-vim.opt.number = true
+-- line numbers
+vim.opt.nu = true
 vim.opt.relativenumber = true
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.signcolumn = "yes"
-vim.opt.shada = { "'10", "<0", "s10", "h" }
-vim.opt.formatoptions:remove("o")
-vim.opt.wrap = true
-vim.opt.linebreak = true
+
+-- indentation
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.more = true
-vim.opt.foldmethod = "manual"
-vim.opt.title = true
-vim.opt.titlestring = '%t%( %M%)%( (%{expand("%:~:h")})%)%a (nvim)'
-vim.opt.undofile = true
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.wrap = false
+
+-- backup and undo
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+-- search
+vim.opt.inccommand = "split"
+
+-- UI
+vim.opt.background = "dark"
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+
+-- folding (for nvim-ufo)
+vim.o.foldenable = true
+vim.o.foldmethod = "manual"
+vim.o.foldlevel = 99
+vim.o.foldcolumn = "0"
+
+-- window splits
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
+-- misc
+vim.opt.isfname:append("@-@")
+vim.opt.updatetime = 50
+vim.opt.colorcolumn = "80"
+vim.o.list = true
+vim.opt.listchars = {
+    tab = '» ',
+    trail = '·',
+    nbsp = '␣',
+    eol = '↲',
+}
+

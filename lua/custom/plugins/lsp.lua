@@ -7,12 +7,10 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
-		"hrsh7th/cmp-cmdline",
 		"hrsh7th/nvim-cmp",
 		{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 		"saadparwaiz1/cmp_luasnip",
 		"j-hui/fidget.nvim",
-		{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 		{
 			"folke/lazydev.nvim",
 			ft = "lua",
@@ -26,17 +24,6 @@ return {
 	config = function()
 		require("conform").setup({
 			notify_on_error = false,
-			format_on_save = function(bufnr)
-				local disable_filetypes = { c = true, cpp = true }
-				if disable_filetypes[vim.bo[bufnr].filetype] then
-					return nil
-				else
-					return {
-						timeout_ms = 500,
-						lsp_format = "fallback",
-					}
-				end
-			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
 				go = { "gofmt" },
@@ -45,6 +32,9 @@ return {
 				elixir = { "mix" },
 			},
 		})
+		vim.keymap.set("n", "<leader>f", function()
+			require("conform").format()
+		end, { desc = "Format buffer" })
 		local cmp = require("cmp")
 		local cmp_lsp = require("cmp_nvim_lsp")
 		local capabilities = vim.tbl_deep_extend(
@@ -110,6 +100,19 @@ return {
 						},
 					})
 				end,
+				phpactor = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.phpactor.setup({
+						cmd = { "phpactor" },
+						capabilities = capabilities,
+						root_dir = lspconfig.util.root_pattern(
+							".git",
+							"composer.json",
+							".phpactor.json",
+							".phpactor.yml"
+						),
+					})
+				end,
 				["tailwindcss"] = function()
 					local lspconfig = require("lspconfig")
 					lspconfig.tailwindcss.setup({
@@ -152,8 +155,8 @@ return {
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+				["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
+				["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
 				["<C-y>"] = cmp.mapping.confirm({ select = true }),
 				["<C-Space>"] = cmp.mapping.complete(),
 			}),
@@ -165,16 +168,31 @@ return {
 			}),
 		})
 
-		require("lsp_lines").setup()
-		vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
-
-		vim.keymap.set("", "<leader>l", function()
-			local config = vim.diagnostic.config() or {}
-			if config.virtual_text then
-				vim.diagnostic.config({ virtual_text = false, virtual_lines = true })
-			else
-				vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
-			end
-		end, { desc = "Toggle lsp_lines" })
+		vim.diagnostic.config({
+			severity_sort = true,
+			float = { border = "rounded", source = "if_many" },
+			underline = { severity = vim.diagnostic.severity.ERROR },
+			signs = vim.g.have_nerd_font and {
+				text = {
+					[vim.diagnostic.severity.ERROR] = "󰅚 ",
+					[vim.diagnostic.severity.WARN] = "󰀪 ",
+					[vim.diagnostic.severity.INFO] = "󰋽 ",
+					[vim.diagnostic.severity.HINT] = "󰌶 ",
+				},
+			} or {},
+			virtual_text = {
+				source = "if_many",
+				spacing = 2,
+				format = function(diagnostic)
+					local diagnostic_message = {
+						[vim.diagnostic.severity.ERROR] = diagnostic.message,
+						[vim.diagnostic.severity.WARN] = diagnostic.message,
+						[vim.diagnostic.severity.INFO] = diagnostic.message,
+						[vim.diagnostic.severity.HINT] = diagnostic.message,
+					}
+					return diagnostic_message[diagnostic.severity]
+				end,
+			},
+		})
 	end,
 }
