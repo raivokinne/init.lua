@@ -1,3 +1,5 @@
+vim.cmd("let g:netrw_banner = 0")
+
 -- line numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -37,12 +39,4 @@ vim.opt.splitbelow = true
 -- misc
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
-vim.opt.colorcolumn = "80"
-vim.o.list = true
-vim.opt.listchars = {
-    tab = '» ',
-    trail = '·',
-    nbsp = '␣',
-    eol = '↲',
-}
-
+-- vim.opt.colorcolumn = "80"
