@@ -2,8 +2,6 @@ vim.cmd.colorscheme("lunaperche")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
-vim.cmd("let g:netrw_banner = 0")
-
 -- cursor
 vim.opt.guicursor = ""
 
@@ -32,6 +30,7 @@ vim.opt.inccommand = "split"
 vim.opt.background = "dark"
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
+vim.opt.winborder = "rounded"
 
 -- window splits
 vim.opt.splitright = true
@@ -68,7 +67,6 @@ vim.pack.add({
 	{ src = "https://github.com/echasnovski/mini.pick" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
 	{ src = "https://github.com/mbbill/undotree" },
-    { src = "https://github.com/stevearc/oil.nvim" },
 })
 
 map("n", "<leader>u", vim.cmd.UndotreeToggle)
@@ -79,25 +77,26 @@ require "mini.pick".setup({
 	}
 })
 
-require "oil".setup()
-
 map('n', '<leader>pf', ":Pick files<CR>")
 map('n', '<leader>h', ":Pick help<CR>")
-map('n', '<leader>e', ":Oil<CR>")
 map('i', '<c-e>', function() vim.lsp.completion.get() end)
 
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-    disable = function(lang, buf)
+local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+if ok then
+  ts_configs.setup {
+    ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+    sync_install = false,
+    auto_install = true,
+    highlight = {
+      enable = true,
+      disable = function(lang, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then
-            return true
+          return true
         end
-    end,
-  },
-}
+      end,
+    },
+  }
+end
+
