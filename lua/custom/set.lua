@@ -26,12 +26,6 @@ vim.opt.background = "dark"
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
--- folding (for nvim-ufo)
-vim.o.foldenable = true
-vim.o.foldmethod = "manual"
-vim.o.foldlevel = 99
-vim.o.foldcolumn = "0"
-
 -- window splits
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -39,4 +33,3 @@ vim.opt.splitbelow = true
 -- misc
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
--- vim.opt.colorcolumn = "80"
