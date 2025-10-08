@@ -1,3 +1,3 @@
-vim.cmd.colorscheme("nuitbleue")
+vim.cmd.colorscheme("vim")
 
 require("custom.config")
