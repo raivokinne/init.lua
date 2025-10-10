@@ -1,6 +1,7 @@
 require("custom.config.set")
 require("custom.config.remap")
 require("custom.config.lazy")
+require("custom.config.terminal")
 
 local augroup = vim.api.nvim_create_augroup
 local RaivoGroup = augroup("Raivo", {})

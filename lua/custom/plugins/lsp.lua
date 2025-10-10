@@ -3,172 +3,235 @@ return {
 	dependencies = {
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-buffer",
-		"hrsh7th/cmp-path",
-		"hrsh7th/nvim-cmp",
-		{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-		"saadparwaiz1/cmp_luasnip",
-		"j-hui/fidget.nvim",
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+
+		{ "j-hui/fidget.nvim", opts = {} },
+		{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
+
+		"b0o/SchemaStore.nvim",
 	},
 	config = function()
-		local cmp = require("cmp")
-		local cmp_lsp = require("cmp_nvim_lsp")
-		local capabilities = vim.tbl_deep_extend(
-			"force",
-			{},
-			vim.lsp.protocol.make_client_capabilities(),
-			cmp_lsp.default_capabilities()
-		)
-		require("fidget").setup({})
-		require("mason").setup()
-		require("mason-lspconfig").setup({
-			ensure_installed = {
-				"lua_ls",
-				"rust_analyzer",
-				"gopls",
-				"tailwindcss",
-			},
-			handlers = {
-				function(server_name) -- default handler (optional)
-					require("lspconfig")[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
+		if vim.g.obsidian then
+			return
+		end
 
-				zls = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.zls.setup({
-						root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
-						settings = {
-							zls = {
-								enable_inlay_hints = true,
-								enable_snippets = true,
-								warn_style = true,
-							},
-						},
-					})
-					vim.g.zig_fmt_parse_errors = 0
-					vim.g.zig_fmt_autosave = 0
-				end,
-				clangd = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.clangd.setup({
-						cmd = { "clangd", "--background-index" },
-						capabilities = capabilities,
-						root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git"),
-					})
-				end,
-				["lua_ls"] = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.lua_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								format = {
-									enable = true,
-									defaultConfig = {
-										indent_style = "space",
-										indent_size = "2",
-									},
-								},
-							},
-						},
-					})
-				end,
-				phpactor = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.phpactor.setup({
-						cmd = { "phpactor" },
-						capabilities = capabilities,
-						root_dir = lspconfig.util.root_pattern(
-							".git",
-							"composer.json",
-							".phpactor.json",
-							".phpactor.yml"
-						),
-					})
-				end,
-				["tailwindcss"] = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.tailwindcss.setup({
-						capabilities = capabilities,
-						filetypes = {
-							"html",
-							"css",
-							"scss",
-							"javascript",
-							"javascriptreact",
-							"typescript",
-							"typescriptreact",
-							"vue",
-							"svelte",
-						},
-						settings = {
-							tailwindCSS = {
-								experimental = {
-									classRegex = {
-										"tw`([^`]*)",
-										'tw="([^"]*)',
-										'tw={"([^"}]*)',
-										"tw\\.\\w+`([^`]*)",
-										"tw\\(.*?\\)`([^`]*)",
-									},
-								},
-							},
-						},
-					})
-				end,
-			},
-		})
+		local capabilities = nil
+		if pcall(require, "cmp_nvim_lsp") then
+			capabilities = require("cmp_nvim_lsp").default_capabilities()
+		end
 
-		local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-		cmp.setup({
-			snippet = {
-				expand = function(args)
-					require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-				end,
-			},
-			mapping = cmp.mapping.preset.insert({
-				["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
-				["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				["<C-Space>"] = cmp.mapping.complete(),
-			}),
-			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" }, -- For luasnip users.
-				{ name = "path" },
-				{ name = "buffer" },
-			}),
-		})
-
-		vim.diagnostic.config({
-			severity_sort = true,
-			float = { border = "rounded", source = "if_many" },
-			underline = { severity = vim.diagnostic.severity.ERROR },
-			signs = vim.g.have_nerd_font and {
-				text = {
-					[vim.diagnostic.severity.ERROR] = "󰅚 ",
-					[vim.diagnostic.severity.WARN] = "󰀪 ",
-					[vim.diagnostic.severity.INFO] = "󰋽 ",
-					[vim.diagnostic.severity.HINT] = "󰌶 ",
+		local servers = {
+			bashls = true,
+			gopls = {
+				manual_install = true,
+				settings = {
+					gopls = {
+						hints = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+					},
 				},
-			} or {},
-			virtual_text = {
-				source = "if_many",
-				spacing = 2,
-				format = function(diagnostic)
-					local diagnostic_message = {
-						[vim.diagnostic.severity.ERROR] = diagnostic.message,
-						[vim.diagnostic.severity.WARN] = diagnostic.message,
-						[vim.diagnostic.severity.INFO] = diagnostic.message,
-						[vim.diagnostic.severity.HINT] = diagnostic.message,
-					}
-					return diagnostic_message[diagnostic.severity]
-				end,
 			},
+			glsl_analyzer = true,
+			lua_ls = {
+				cmd = { "lua-language-server" },
+			},
+			rust_analyzer = true,
+			svelte = true,
+			templ = true,
+			taplo = true,
+			intelephense = {
+				settings = {
+					intelephense = {
+						format = {
+							braces = "k&r",
+						},
+					},
+				},
+			},
+
+			pyright = true,
+			ruff = { manual_install = true },
+			biome = true,
+			astro = true,
+			vtsls = {
+				server_capabilities = {
+					documentFormattingProvider = false,
+				},
+			},
+			-- denols = true,
+			jsonls = {
+				server_capabilities = {
+					documentFormattingProvider = false,
+				},
+				settings = {
+					json = {
+						schemas = require("schemastore").json.schemas(),
+						validate = { enable = true },
+					},
+				},
+			},
+
+			yamlls = {
+				settings = {
+					yaml = {
+						schemaStore = {
+							enable = false,
+							url = "",
+						},
+					},
+				},
+			},
+
+			ols = {},
+			racket_langserver = { manual_install = true },
+			roc_ls = { manual_install = true },
+
+			clangd = {
+				init_options = { clangdFileStatus = true },
+
+				filetypes = { "c" },
+			},
+
+			tailwindcss = {
+				init_options = {
+					userLanguages = {
+						elixir = "phoenix-heex",
+						eruby = "erb",
+						heex = "phoenix-heex",
+					},
+				},
+				filetypes = {
+					"html",
+					"css",
+					"scss",
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					"vue",
+					"svelte",
+					"ocaml.mlx",
+				},
+				settings = {
+					tailwindCSS = {
+						experimental = {
+							classRegex = {
+								[[class: "([^"]*)]],
+								[[className="([^"]*)]],
+							},
+						},
+						includeLanguages = {
+							["ocaml.mlx"] = "html",
+						},
+					},
+				},
+			},
+		}
+
+		local servers_to_install = vim.tbl_filter(function(key)
+			local t = servers[key]
+			if type(t) == "table" then
+				return not t.manual_install
+			else
+				return t
+			end
+		end, vim.tbl_keys(servers))
+
+		require("mason").setup()
+		local ensure_installed = {
+			"stylua",
+			"lua_ls",
+			"delve",
+			-- "tailwind-language-server",
+		}
+
+		vim.list_extend(ensure_installed, servers_to_install)
+		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+
+		vim.lsp.config("*", {
+			capabilities = capabilities,
 		})
+
+		for name, config in pairs(servers) do
+			if config == true then
+				config = {}
+			end
+
+			if next(config) ~= nil then
+				local lsp_config = vim.tbl_deep_extend("force", {}, config)
+				lsp_config.manual_install = nil
+				vim.lsp.config(name, lsp_config)
+			end
+
+			vim.lsp.enable(name)
+		end
+
+		local disable_semantic_tokens = {
+			-- lua = true,
+		}
+
+		vim.api.nvim_create_autocmd("LspAttach", {
+			callback = function(args)
+				local bufnr = args.buf
+				local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
+
+				local settings = servers[client.name]
+				if type(settings) ~= "table" then
+					settings = {}
+				end
+
+				local builtin = require("telescope.builtin")
+
+				vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
+				vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
+				vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
+				vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+
+				vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
+				vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
+				vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
+				vim.keymap.set("n", "<space>ww", function()
+					builtin.diagnostics({ root_dir = true })
+				end, { buffer = 0 })
+
+				local filetype = vim.bo[bufnr].filetype
+				if disable_semantic_tokens[filetype] then
+					client.server_capabilities.semanticTokensProvider = nil
+				end
+
+				-- Override server capabilities
+				if settings.server_capabilities then
+					for k, v in pairs(settings.server_capabilities) do
+						if v == vim.NIL then
+							---@diagnostic disable-next-line: cast-local-type
+							v = nil
+						end
+
+						client.server_capabilities[k] = v
+					end
+				end
+			end,
+		})
+
+		require("lsp_lines").setup()
+		vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
+
+		vim.keymap.set("", "<leader>l", function()
+			local config = vim.diagnostic.config() or {}
+			if config.virtual_text then
+				vim.diagnostic.config({ virtual_text = false, virtual_lines = true })
+			else
+				vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
+			end
+		end, { desc = "Toggle lsp_lines" })
 	end,
 }

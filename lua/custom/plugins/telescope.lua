@@ -13,6 +13,9 @@ return {
 	},
 	config = function()
 		require("telescope").setup({
+			defaults = {
+				file_ignore_patterns = { "dune.lock", "node_modules", "vendor" },
+			},
 			extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown(),
