@@ -1,10 +1,12 @@
 vim.lsp.enable({
-  "bashls",
-  "gopls",
-  "lua_ls",
-  "vtsls",
-  "rust-analyzer",
-  "yamlls",
+	"bashls",
+	"gopls",
+	"lua_ls",
+	"vtsls",
+	"rust-analyzer",
+	"yamlls",
+	"clangd",
+	"pyright",
 })
 
 vim.diagnostic.config({
@@ -18,4 +20,3 @@ vim.diagnostic.config({
 		prefix = "",
 	},
 })
-
