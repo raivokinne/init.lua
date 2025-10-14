@@ -3,11 +3,16 @@ local augroup = vim.api.nvim_create_augroup
 local map = vim.keymap.set
 local bs = { buffer = true, silent = true }
 local brs = { buffer = true, remap = true, silent = true }
-local TheRaivoGroup = augroup("TheRaivo", {})
 
 autocmd("LspAttach", {
-	group = TheRaivoGroup,
+	group = vim.api.nvim_create_augroup('my.lsp', {}),
 	callback = function(e)
+		local client = assert(vim.lsp.get_client_by_id(e.data.client_id))
+		if client:supports_method('textDocument/completion') then
+			-- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+			-- client.server_capabilities.completionProvider.triggerCharacters = chars
+			vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
+		end
 		local opts = { buffer = e.buf }
 		vim.keymap.set("n", "gd", function()
 			vim.lsp.buf.definition()
