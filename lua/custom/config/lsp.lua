@@ -1,12 +1,18 @@
 vim.lsp.enable({
 	"bashls",
 	"gopls",
-	"lua_ls",
-	"vtsls",
-	"rust-analyzer",
 	"yamlls",
+	"lua_ls",
+	"cssls",
+	"svelte",
+	"rust_analyzer",
 	"clangd",
-	"pyright",
+	"ruff",
+	"glsl_analyzer",
+	"intelephense",
+	"biome",
+	"tailwindcss",
+	"vtsls",
 })
 
 vim.diagnostic.config({
