@@ -12,14 +12,6 @@ return {
 		{ "nvim-telescope/telescope-ui-select.nvim" },
 	},
 	config = function()
-		local telescope = require("telescope")
-		telescope.setup({
-			pickers = {
-				find_files = {
-					theme = "ivy",
-				}
-			},
-		})
 		pcall(require("telescope").load_extension, "fzf")
 		pcall(require("telescope").load_extension, "ui-select")
 		local builtin = require("telescope.builtin")

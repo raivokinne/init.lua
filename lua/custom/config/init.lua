@@ -1,7 +1,5 @@
 require("custom.config.set")
 require("custom.config.remap")
 require("custom.config.lazy")
-require("custom.config.umbraline")
 require("custom.config.lsp")
 require("custom.config.autocmds")
-require("custom.config.statusline")

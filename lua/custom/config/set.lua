@@ -1,5 +1,4 @@
 vim.opt.mouse = ""
-vim.opt.winborder = "rounded"
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
@@ -20,10 +19,3 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
-vim.o.list = true
-vim.opt.listchars = {
-	tab = '» ',
-	trail = '·',
-	nbsp = '␣',
-	eol = '↲',
-}
