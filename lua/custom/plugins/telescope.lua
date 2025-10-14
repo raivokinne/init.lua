@@ -12,26 +12,26 @@ return {
 		{ "nvim-telescope/telescope-ui-select.nvim" },
 	},
 	config = function()
-		require("telescope").setup({
-			defaults = {
-				file_ignore_patterns = { "dune.lock", "node_modules", "vendor" },
-			},
-			extensions = {
-				["ui-select"] = {
-					require("telescope.themes").get_dropdown(),
-				},
+		local telescope = require("telescope")
+		telescope.setup({
+			pickers = {
+				find_files = {
+					theme = "ivy",
+				}
 			},
 		})
 		pcall(require("telescope").load_extension, "fzf")
 		pcall(require("telescope").load_extension, "ui-select")
 		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
-		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
-		vim.keymap.set("n", "<leader>ps", function()
-			builtin.live_grep({
-				grep_open_files = true,
-				prompt_title = "Live Grep in Open Files",
-			})
-		end, { desc = "[S]earch [/] in Open Files" })
+		vim.keymap.set({ "n" }, "<leader>pf", builtin.find_files, { desc = "Telescope live grep" })
+		vim.keymap.set({ "n" }, "<leader>pg", builtin.live_grep, { desc = "Telescope live grep" })
+		vim.keymap.set({ "n" }, "<leader>pb", builtin.buffers, { desc = "Telescope buffers" })
+		vim.keymap.set({ "n" }, "<leader>pi", builtin.grep_string, { desc = "Telescope live string" })
+		vim.keymap.set({ "n" }, "<leader>po", builtin.oldfiles, { desc = "Telescope buffers" })
+		vim.keymap.set({ "n" }, "<leader>ph", builtin.help_tags, { desc = "Telescope help tags" })
+		vim.keymap.set({ "n" }, "<leader>pm", builtin.man_pages, { desc = "Telescope man pages" })
+		vim.keymap.set({ "n" }, "<leader>pt", builtin.builtin, { desc = "Telescope tags" })
+		vim.keymap.set({ "n" }, "<leader>pd", builtin.registers, { desc = "Telescope tags" })
+		vim.keymap.set({ "n" }, "<leader>pc", builtin.git_bcommits, { desc = "Telescope tags" })
 	end,
 }
