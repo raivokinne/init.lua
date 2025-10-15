@@ -39,7 +39,6 @@ vim.keymap.set("n", "<leader>B", function()
 	dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
 end, { desc = "Debug: Conditional Breakpoint" })
 
-
 local dapui = require("dapui")
 
 local function layout(name)
@@ -141,17 +140,17 @@ dap.adapters.codelldb = {
 }
 
 dap.configurations.cpp = {
-  {
-    name = "Launch file",
-    type = "codelldb",
-    request = "launch",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
-    cwd = "${workspaceFolder}",
-    stopOnEntry = false,
-    args = {},
-  },
+	{
+		name = "Launch file",
+		type = "codelldb",
+		request = "launch",
+		program = function()
+			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+		end,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+		args = {},
+	},
 }
 
 dap.configurations.c = dap.configurations.cpp

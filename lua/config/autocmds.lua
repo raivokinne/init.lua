@@ -1,5 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
+local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', { clear = true })
 local map = vim.keymap.set
 local bs = { buffer = true, silent = true }
 local brs = { buffer = true, remap = true, silent = true }
@@ -39,7 +40,11 @@ autocmd("LspAttach", {
 		client.server_capabilities.semanticTokensProvider = nil
 		local opts = { buffer = e.buf }
 		vim.keymap.set({ 'n', 'x' }, '<leader>f', function()
-			vim.lsp.buf.format({ async = true })
+			vim.lsp.buf.format({
+				bufnr = e.buf,
+				async = false,
+				timeout_ms = 10000,
+			})
 		end, opts)
 		vim.keymap.set("n", "gd", function()
 			vim.lsp.buf.definition()
@@ -53,9 +58,9 @@ autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>vd", function()
 			vim.diagnostic.open_float()
 		end, opts)
-		vim.keymap.set("n", "<leader>ca", function()
-			vim.lsp.buf.code_action()
-		end, opts)
+		-- vim.keymap.set("n", "<leader>ca", function()
+		-- 	vim.lsp.buf.code_action()
+		-- end, opts)
 		vim.keymap.set("n", "<leader>rr", function()
 			vim.lsp.buf.references()
 		end, opts)

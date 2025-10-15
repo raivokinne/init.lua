@@ -16,9 +16,6 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 map("n", "=ap", "ma=ap'a")
 
-map("n", "tt", ":tabnew<CR>")
-map("n", "tc", ":tabclose<CR>")
-
 map("x", "<leader>p", [["_dP]])
 
 map({ "n", "v", "x" }, "<C-s>", [[:s/\V]], { desc = "Enter substitue mode in selection" })
@@ -69,7 +66,3 @@ local function pack_clean()
 end
 
 map("n", "<leader>pcc", pack_clean)
-
-for i = 1, 8 do
-	map({ "n", "t" }, "<leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
-end

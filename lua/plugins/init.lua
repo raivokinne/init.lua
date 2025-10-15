@@ -13,12 +13,20 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
+	{ src = "https://github.com/RRethy/base16-nvim" },
+	{ src = "https://github.com/ThePrimeagen/harpoon",                    version = "harpoon2" },
+	{ src = "https://github.com/chentoast/marks.nvim" },
+	{ src = "https://github.com/aznhe21/actions-preview.nvim" },
 })
 
 require("mason").setup()
+require("plugins.theme")
+require("plugins.harpoon")
 require("plugins.treesitter")
 require("plugins.dap")
 require("plugins.trouble")
 require("plugins.telescope")
 require("plugins.fugitive")
 require("plugins.luasnip")
+require("plugins.marks")
+require("plugins.actions-preview")

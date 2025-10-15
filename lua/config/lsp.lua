@@ -31,4 +31,3 @@ vim.diagnostic.config {
 }
 
 vim.cmd [[set completeopt+=menuone,noselect,popup]]
-

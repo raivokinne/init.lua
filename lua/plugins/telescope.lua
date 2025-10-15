@@ -14,4 +14,3 @@ vim.keymap.set("n", "<leader>ph", builtin.help_tags, { desc = "Telescope help" }
 vim.keymap.set("n", "<leader>pm", builtin.man_pages, { desc = "Telescope man" })
 vim.keymap.set("n", "<leader>pt", builtin.builtin, { desc = "Telescope builtins" })
 vim.keymap.set("n", "<leader>pd", builtin.registers, { desc = "Telescope registers" })
-
