@@ -9,11 +9,38 @@ autocmd("LspAttach", {
 	callback = function(e)
 		local client = assert(vim.lsp.get_client_by_id(e.data.client_id))
 		if client:supports_method('textDocument/completion') then
-			-- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-			-- client.server_capabilities.completionProvider.triggerCharacters = chars
-			vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
+			vim.lsp.completion.enable(true, client.id, e.buf, {
+				autotrigger = true,
+				convert = function(item)
+					return { abbr = item.label:gsub("%b()", "") }
+				end,
+			})
 		end
+		local function client_supports_method(method, bufnr)
+			if vim.fn.has 'nvim-0.11' == 1 then
+				return client:supports_method(method, bufnr)
+			else
+				return client.supports_method(method, { bufnr = bufnr })
+			end
+		end
+		if client and client_supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, e.buf) then
+			vim.keymap.set('n', '<leader>th', function()
+				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = e.buf })
+			end)
+		end
+		vim.api.nvim_create_autocmd('LspDetach', {
+			group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
+			callback = function(event2)
+				vim.lsp.buf.clear_references()
+				vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = event2.buf }
+			end,
+		})
+		vim.keymap.set("i", "<C-e>", vim.lsp.completion.get, { desc = "trigger autocompletion" })
+		client.server_capabilities.semanticTokensProvider = nil
 		local opts = { buffer = e.buf }
+		vim.keymap.set({ 'n', 'x' }, '<leader>f', function()
+			vim.lsp.buf.format({ async = true })
+		end, opts)
 		vim.keymap.set("n", "gd", function()
 			vim.lsp.buf.definition()
 		end, opts)
@@ -47,7 +74,6 @@ autocmd("LspAttach", {
 	end,
 })
 
--- Highlight yanked text
 local highlight_group = augroup("YankHighlight", { clear = true })
 autocmd("TextYankPost", {
 	pattern = "*",
