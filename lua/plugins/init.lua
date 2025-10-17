@@ -26,10 +26,8 @@ vim.pack.add({
 	{ src = "https://github.com/mbbill/undotree" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/brianhuster/live-preview.nvim" },
-	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://github.com/ThePrimeagen/harpoon",                    version = "harpoon2" },
 	{ src = "https://github.com/laytan/cloak.nvim"},
-	{ src = "https://github.com/kndndrj/nvim-dbee"},
 	{ src = "https://github.com/rcarriga/nvim-notify"},
 })
 
@@ -64,5 +62,4 @@ require("plugins.undotree")
 require("plugins.fugitive")
 require("plugins.harpoon")
 require("plugins.cloak")
-require("plugins.dbee")
 require("plugins.notify")
