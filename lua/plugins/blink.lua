@@ -21,7 +21,7 @@ require('blink.cmp').setup({
 			laravel = {
 				name = "laravel",
 				module = "blink.compat.source",
-				score_offset = 95, -- show at a higher priority than lsp
+				score_offset = 95
 			},
 		},
 	},

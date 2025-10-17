@@ -6,7 +6,6 @@ vim.lsp.enable({
 	"cssls",
 	"svelte",
 	"rust-analyzer",
-	"shellcheck",
 	"clangd",
 	"ruff",
 	"glsl_analyzer",

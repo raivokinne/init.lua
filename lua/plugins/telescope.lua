@@ -2,7 +2,11 @@ local telescope = require("telescope")
 telescope.setup({
 	defaults = {
 		file_ignore_patterns = { "vendor", "node_modules" },
-	}
+		color_devicons = true,
+		layout_config = {
+			prompt_position = "top",
+		}
+	},
 })
 pcall(telescope.load_extension, "fzf")
 pcall(telescope.load_extension, "ui-select")

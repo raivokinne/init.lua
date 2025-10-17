@@ -21,21 +21,24 @@ autocmd("LspAttach", {
 				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
 			end, opts)
 		end
-		local function map(modes, lhs, rhs, desc)
-			vim.keymap.set(modes, lhs, rhs, vim.tbl_extend('force', opts, { desc = desc }))
-		end
-		map({ 'n', 'x' }, '<leader>f', function()
+		vim.keymap.set({ 'n', 'x' }, '<leader>f', function()
 			vim.lsp.buf.format({ bufnr = bufnr, async = false, timeout_ms = 10000 })
-		end, 'Format')
-		map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
-		map('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
-		map('n', '<leader>ws', vim.lsp.buf.workspace_symbol, 'Workspace symbols')
-		map('n', '<leader>ca', vim.lsp.buf.code_action, 'Code Actions')
-		map('n', '<leader>vd', vim.diagnostic.open_float, 'Show diagnostic')
-		map('n', '<leader>rr', vim.lsp.buf.references, 'References')
-		map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename')
-		map('n', '<leader>dn', function() vim.diagnostic.jump({ count = 1 }) end, 'Next diagnostic')
-		map('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1 }) end, 'Previous diagnostic')
+		end)
+		local builtin = require "telescope.builtin"
+
+		vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
+		vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
+		vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
+		vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+
+		vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
+		vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
+		vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
+		vim.keymap.set("n", "<space>ww", function()
+			builtin.diagnostics { root_dir = true }
+		end, { buffer = 0 })
 	end,
 })
 

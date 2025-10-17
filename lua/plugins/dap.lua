@@ -1,5 +1,4 @@
 local dap_group = vim.api.nvim_create_augroup("DapGroup", { clear = true })
-
 local function navigate(args)
 	local buffer = args.buf
 	local wid = nil

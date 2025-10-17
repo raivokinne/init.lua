@@ -3,13 +3,7 @@ if not ok then
   return
 end
 
-laravel.setup({
-	features = {
-		pickers = {
-			provider = "telescope"
-		}
-	}
-})
+laravel.setup({})
 
 _G.Laravel = {
   app = function(abstract)
@@ -75,12 +69,64 @@ _G.Laravel = {
     local cmd = laravel.app:make("laravel/commands/artisan")
     cmd:handle()
   end,
+
+  tinker = {
+    open = function()
+      local cmd = laravel.app:make("laravel.extensions.tinker.tinker:open")
+      if cmd then cmd:handle() end
+    end,
+
+    create = function()
+      local cmd = laravel.app:make("laravel.extensions.tinker.tinker:create")
+      if cmd then cmd:handle() end
+    end,
+
+    -- Select from existing tinker buffers
+    select = function()
+      local cmd = laravel.app:make("laravel.extensions.tinker.tinker:select")
+      if cmd then cmd:handle() end
+    end,
+
+    -- Execute raw tinker code and get response
+    ---@param code string
+    ---@return table, any error
+    raw = function(code)
+      local tinker_service = laravel.app:make("tinker")
+      if not tinker_service then
+        return {}, "Tinker service not available"
+      end
+      return tinker_service:raw(code)
+    end,
+
+    -- Execute tinker code and get text response
+    ---@param code string
+    ---@return string, any error
+    text = function(code)
+      local tinker_service = laravel.app:make("tinker")
+      if not tinker_service then
+        return "", "Tinker service not available"
+      end
+      return tinker_service:text(code)
+    end,
+
+    -- Execute tinker code and get JSON response
+    ---@param code string
+    ---@return table, any error
+    json = function(code)
+      local tinker_service = laravel.app:make("tinker")
+      if not tinker_service then
+        return {}, "Tinker service not available"
+      end
+      return tinker_service:json(code)
+    end,
+  },
 }
 
 vim.api.nvim_create_user_command("Laravel", function()
   Laravel.pickers.laravel()
 end, { desc = "Open Laravel command center" })
 
+-- Setup keymaps
 local map = vim.keymap.set
 
 map("n", "<leader>ll", function() Laravel.pickers.laravel() end, { desc = "Laravel: Open Laravel Picker" })
@@ -98,6 +144,10 @@ map("n", "<leader>lm", function() Laravel.pickers.make() end, { desc = "Laravel:
 map("n", "<leader>lc", function() Laravel.pickers.laravel() end, { desc = "Laravel: Open Command Center" })
 map("n", "<leader>lo", function() Laravel.pickers.resources() end, { desc = "Laravel: Open Resources Picker" })
 map("n", "<leader>lp", function() Laravel.commands.run("command_center") end, { desc = "Laravel: Open Command Center" })
+
+map("n", "<leader>lto", function() Laravel.tinker.open() end, { desc = "Laravel: Open Tinker" })
+map("n", "<leader>ltc", function() Laravel.tinker.create() end, { desc = "Laravel: Create Tinker Buffer" })
+map("n", "<leader>lts", function() Laravel.tinker.select() end, { desc = "Laravel: Select Tinker Buffer" })
 
 map("n", "gf", function()
   local gf_service = Laravel.app("gf")
