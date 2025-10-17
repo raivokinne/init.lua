@@ -15,9 +15,14 @@ require('blink.cmp').setup({
 		}
 	},
 	sources = {
-		default = { "lsp", "lazydev", "cmdline", "path", "buffer", "snippets" },
+		default = { "lsp", "laravel", "lazydev", "cmdline", "path", "buffer", "snippets" },
 		providers = {
 			lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+			laravel = {
+				name = "laravel",
+				module = "blink.compat.source",
+				score_offset = 95, -- show at a higher priority than lsp
+			},
 		},
 	},
 	snippets = { preset = 'luasnip' },

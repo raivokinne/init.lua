@@ -18,6 +18,14 @@ vim.pack.add({
 	{ src = "https://github.com/folke/lazydev.nvim" },
 	{ src = "https://github.com/j-hui/fidget.nvim" },
 	{ src = "https://github.com/Bilal2453/luvit-meta" },
+	{ src = "https://github.com/adalessa/laravel.nvim" },
+	{ src = "https://github.com/tpope/vim-dotenv" },
+	{ src = "https://github.com/MunifTanjim/nui.nvim" },
+	{ src = "https://github.com/nvim-neotest/nvim-nio" },
+	{ src = "https://github.com/ravitemer/mcphub.nvim" },
+	{ src = "https://github.com/Saghen/blink.compat" },
+	{ src = "https://github.com/mbbill/undotree" },
+	{ src = "https://github.com/tpope/vim-fugitive" },
 })
 
 require("mason").setup()
@@ -34,3 +42,6 @@ require("plugins.trouble")
 require("plugins.telescope")
 require("plugins.luasnip")
 require("plugins.blink")
+require("plugins.laravel")
+require("plugins.undotree")
+require("plugins.fugitive")
