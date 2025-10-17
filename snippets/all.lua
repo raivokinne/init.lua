@@ -5,8 +5,4 @@ return {
 	s("mail", t("raivokinne236@gmail.com")),
 	s("email", t("raivokinne236@gmail.com")),
 	s("gh", t("github.com/raivokinne")),
-	s("(", { t("("), i(1), t(")") }),
-	s("[", { t("["), i(1), t("]") }),
-	s("{", { t("{"), i(1), t("}") }),
-	s("$", { t("$"), i(1), t("$") }),
 }

@@ -1,4 +1,6 @@
 require("config.set")
 require("config.remap")
 require("config.lsp")
-require("config.autocmds")
+require("config.cmds")
+require("config.terminal")
+require("config.menu")

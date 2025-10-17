@@ -16,6 +16,9 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 map("n", "=ap", "ma=ap'a")
 
+map("n", "tt", ":tabnew<CR>")
+map("n", "tc", ":tabclose<CR>")
+
 map("x", "<leader>p", [["_dP]])
 
 map({ "n", "v", "x" }, "<C-s>", [[:s/\V]], { desc = "Enter substitue mode in selection" })
@@ -24,8 +27,6 @@ map({ "n", "v" }, "<leader>y", [["+y]])
 map("n", "<leader>Y", [["+Y]])
 
 map({ "n", "v" }, "<leader>d", '"_d')
-
-map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 map("i", "<C-c>", "<Esc>")
 
@@ -66,3 +67,7 @@ local function pack_clean()
 end
 
 map("n", "<leader>pcc", pack_clean)
+
+for i = 1, 8 do
+	map({ "n", "t" }, "<leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
+end

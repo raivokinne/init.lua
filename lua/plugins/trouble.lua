@@ -7,5 +7,5 @@ vim.keymap.set("n", "[t", function()
 end)
 
 vim.keymap.set("n", "]t", function()
-	require("trouble").previous({ skip_groups = true, jump = true })
+	require("trouble").prev({ skip_groups = true, jump = true })
 end)
