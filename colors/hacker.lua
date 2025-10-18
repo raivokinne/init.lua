@@ -1,6 +1,6 @@
 local colorbuddy = require('colorbuddy')
 
-colorbuddy.colorscheme("warm_hacker")
+colorbuddy.colorscheme("hacker")
 
 local Color = colorbuddy.Color
 local Group = colorbuddy.Group
@@ -25,8 +25,6 @@ Group.new("Normal", colors.text, colors.background)
 Group.new("StatusLine", colors.text, colors.darkgreen, styles.bold)
 Group.new("StatusLineNC", colors.text, colors.shadow, styles.NONE)
 Group.new("LineNr", colors.softgreen, colors.background)
-Group.new("CursorLine", colors.none, colors.shadow)
-Group.new("CursorLineNr", colors.highlight, colors.background, styles.bold)
 Group.new("Visual", colors.none, colors.shadow)
 Group.new("Search", colors.background, colors.amber, styles.bold)
 
