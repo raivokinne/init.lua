@@ -1,7 +1,5 @@
 require("config.set")
 require("config.remap")
 require("config.lsp")
-require("config.cmds")
-require("config.terminal")
-require("config.menu")
+require("config.autocmd")
 require("config.global_fn")

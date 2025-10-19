@@ -29,8 +29,9 @@ vim.pack.add({
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/brianhuster/live-preview.nvim" },
 	{ src = "https://github.com/ThePrimeagen/harpoon",                    version = "harpoon2" },
-	{ src = "https://github.com/laytan/cloak.nvim"},
 	{ src = "https://github.com/rcarriga/nvim-notify"},
+	{ src = "https://github.com/stevearc/oil.nvim"},
+	{ src = "https://github.com/nvim-tree/nvim-web-devicons"},
 })
 
 require("mason").setup()
@@ -63,5 +64,5 @@ require("plugins.laravel")
 require("plugins.undotree")
 require("plugins.fugitive")
 require("plugins.harpoon")
-require("plugins.cloak")
 require("plugins.notify")
+require("plugins.oil")

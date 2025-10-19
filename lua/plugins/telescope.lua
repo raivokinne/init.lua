@@ -4,10 +4,6 @@ local telescope = require("telescope")
 telescope.setup({
 	defaults = {
 		file_ignore_patterns = { "vendor", "node_modules" },
-		color_devicons = true,
-		layout_config = {
-			prompt_position = "top",
-		}
 	},
 	extensions = {
 		wrap_results = true,
@@ -32,17 +28,18 @@ vim.keymap.set("n", "<space>pf", builtin.find_files)
 vim.keymap.set("n", "<space>pg", function()
   return builtin.git_files { cwd = vim.fn.expand "%:h" }
 end)
-vim.keymap.set("n", "<space>ph", builtin.help_tags)
-vim.keymap.set("n", "<space>prg", require "plugins.telescope.multi-ripgrep")
-vim.keymap.set("n", "<space>pb", builtin.buffers)
-vim.keymap.set("n", "<space>/", builtin.current_buffer_fuzzy_find)
-
-vim.keymap.set("n", "<space>gw", builtin.grep_string)
-
-vim.keymap.set("n", "<space>pa", function()
-  ---@diagnostic disable-next-line: param-type-mismatch
-  builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath "data", "lazy") }
+vim.keymap.set('n', '<leader>pws', function()
+	local word = vim.fn.expand("<cword>")
+	builtin.grep_string({ search = word })
 end)
+vim.keymap.set('n', '<leader>pWs', function()
+	local word = vim.fn.expand("<cWORD>")
+	builtin.grep_string({ search = word })
+end)
+vim.keymap.set('n', '<leader>ps', function()
+	builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
+vim.keymap.set("n", "<space>ph", builtin.help_tags)
 
 vim.keymap.set("n", "<space>pc", function()
   builtin.find_files { cwd = vim.fn.stdpath "config" }

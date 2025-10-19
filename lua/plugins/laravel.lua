@@ -126,7 +126,6 @@ vim.api.nvim_create_user_command("Laravel", function()
   Laravel.pickers.laravel()
 end, { desc = "Open Laravel command center" })
 
--- Setup keymaps
 local map = vim.keymap.set
 
 map("n", "<leader>ll", function() Laravel.pickers.laravel() end, { desc = "Laravel: Open Laravel Picker" })

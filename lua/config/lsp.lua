@@ -9,10 +9,11 @@ vim.lsp.enable({
 	"clangd",
 	"ruff",
 	"glsl_analyzer",
-	"intelephense",
+	"phpactor",
 	"biome",
 	"tailwindcss",
 	"vtsls",
+	"zls",
 })
 
 vim.diagnostic.config({ virtual_text = true })

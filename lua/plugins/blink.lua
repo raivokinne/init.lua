@@ -10,9 +10,16 @@ require('blink.cmp').setup({
 	},
 	completion = {
 		documentation = {
-			auto_show = true,
+			auto_show = false,
 			auto_show_delay_ms = 200,
-		}
+		},
+		-- ghost_text = {
+		-- 	enabled = true,
+		-- 	show_with_menu = false
+		-- },
+		-- menu = {
+		-- 	auto_show = false,
+		-- },
 	},
 	sources = {
 		default = { "lsp", "laravel", "lazydev", "cmdline", "path", "buffer", "snippets" },
@@ -27,3 +34,4 @@ require('blink.cmp').setup({
 	},
 	snippets = { preset = 'luasnip' },
 })
+

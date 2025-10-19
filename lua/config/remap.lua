@@ -16,6 +16,11 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 map("n", "=ap", "ma=ap'a")
 
+map("n", "tt", ":tabnew<CR>")
+map("n", "<C-h>", ":tabnext<CR>")
+map("n", "<C-l>", ":tabprev<CR>")
+map("n", "tc", ":tabclose<CR>")
+
 map("x", "<leader>p", [["_dP]])
 
 map({ "n", "v", "x" }, "<C-s>", [[:s/\V]], { desc = "Enter substitue mode in selection" })

@@ -29,9 +29,9 @@ configs.setup({
 			if lang == "html" then
 				return true
 			end
-			local max_filesize = 100 * 1024 -- 100 KB
-			local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-			if ok and stats and stats.size > max_filesize then
+			local max_filesize = 100 * 1024 -- 100kb
+			local okey, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+			if okey and stats and stats.size > max_filesize then
 				vim.notify("Treesitter disabled for large file", vim.log.levels.WARN)
 				return true
 			end
