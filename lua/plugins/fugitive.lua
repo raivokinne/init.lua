@@ -1,4 +1,5 @@
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+vim.keymap.set("n", "<leader>gc", ":Git commit <CR>")
 
 local TheRaivo_Fugitive = vim.api.nvim_create_augroup("TheRaivo_Fugitive", {})
 
