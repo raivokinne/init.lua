@@ -4,10 +4,15 @@ local telescope = require("telescope")
 telescope.setup({
 	defaults = {
 		file_ignore_patterns = { "vendor", "node_modules" },
+		sorting_strategy = "ascending",
+		path_displays = { "smart" },
+		layout_config = {
+			prompt_position = "top",
+			preview_cutoff = 40,
+		}
 	},
 	extensions = {
 		wrap_results = true,
-
 		fzf = {},
 		history = {
 			path = vim.fs.joinpath(data, "telescope_history.sqlite3"),

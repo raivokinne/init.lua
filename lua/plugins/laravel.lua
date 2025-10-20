@@ -65,7 +65,7 @@ _G.Laravel = {
     end,
   },
 
-  run = function(args)
+  run = function()
     local cmd = laravel.app:make("laravel/commands/artisan")
     cmd:handle()
   end,

@@ -1,5 +1,4 @@
 ---@diagnostic disable: undefined-global
-
 return {
 	s({ trig = "cl (.*)", regTrig = true },
 		fmta([[console.log(<>, <>)]], {

@@ -1,5 +1,4 @@
 ---@diagnostic disable: undefined-global
-
 return {
 	s({ trig = "dpl" },
 		fmta([[println!("{:?}", <>)]],
