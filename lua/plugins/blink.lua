@@ -3,6 +3,8 @@ require('blink.cmp').setup({
 	signature = { enabled = true },
 	keymap = {
 		preset = "default",
+		['<Tab>'] = false,
+		['<S-Tab'] = false,
 	},
 	appearance = {
 		use_nvim_cmp_as_default = true,
@@ -13,18 +15,10 @@ require('blink.cmp').setup({
 			auto_show = false,
 			auto_show_delay_ms = 200,
 		},
-		-- ghost_text = {
-		-- 	enabled = true,
-		-- 	show_with_menu = false
-		-- },
-		-- menu = {
-		-- 	auto_show = false,
-		-- },
 	},
 	sources = {
-		default = { "lsp", "laravel", "lazydev", "cmdline", "path", "buffer", "snippets" },
+		default = { "lsp", "laravel", "cmdline", "path", "buffer", "snippets" },
 		providers = {
-			lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
 			laravel = {
 				name = "laravel",
 				module = "blink.compat.source",

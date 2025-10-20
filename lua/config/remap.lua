@@ -9,6 +9,9 @@ vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = 
 
 map('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+map("n", "j", "gj")
+map("n", "k", "gk")
+
 map("n", "J", "mzJ`z")
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
@@ -69,3 +72,7 @@ local function pack_clean()
 end
 
 map("n", "<leader>pcc", pack_clean)
+
+for i = 1, 8 do
+	map({ "n", "t" }, "<Leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
+end

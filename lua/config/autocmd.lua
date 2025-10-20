@@ -1,5 +1,4 @@
 local autocmd = vim.api.nvim_create_autocmd
-local userautocmd = vim.api.nvim_create_user_command
 local augroup = vim.api.nvim_create_augroup
 
 autocmd({ "BufWritePre" }, {
@@ -63,37 +62,3 @@ autocmd("FileType", {
 		end, opts)
 	end,
 })
-
-local formatters = {
-	lua = "!stylua %",
-	tex = "!latexindent -s -l -w %",
-}
-
-autocmd("FileType", {
-	callback = function(ev)
-		local ft = vim.bo[ev.buf].filetype
-		local format_cmd = formatters[ft] or "lua vim.lsp.buf.format()"
-		vim.keymap.set("n", "<leader>fo", function()
-			vim.cmd.write()
-			vim.cmd("silent " .. format_cmd)
-		end, { buffer = ev.buf, silent = true, desc = "Format file" })
-	end,
-})
-
-userautocmd("Unique", function()
-  local start_line = vim.fn.getpos("'<")[2]
-  local end_line = vim.fn.getpos("'>")[2]
-
-  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-
-  local seen = {}
-  local uniq = {}
-  for _, l in ipairs(lines) do
-    if not seen[l] then
-      seen[l] = true
-      table.insert(uniq, l)
-    end
-  end
-
-  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, uniq)
-end, { range = true })
