@@ -17,15 +17,7 @@ require('blink.cmp').setup({
 		},
 	},
 	sources = {
-		default = { "lsp", "laravel", "cmdline", "path", "buffer", "snippets" },
-		providers = {
-			laravel = {
-				name = "laravel",
-				module = "blink.compat.source",
-				score_offset = 95
-			},
-		},
+		default = { "lsp", "cmdline", "path", "buffer", "snippets" },
 	},
 	snippets = { preset = 'luasnip' },
 })
-

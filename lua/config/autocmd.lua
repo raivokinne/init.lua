@@ -23,10 +23,6 @@ autocmd("LspAttach", {
 		local function map(modes, lhs, rhs, desc)
 			vim.keymap.set(modes, lhs, rhs, vim.tbl_extend('force', opts, { desc = desc }))
 		end
-		client.server_capabilities.semanticTokensProvider = nil
-		map({ 'n', 'x' }, '<leader>f', function()
-			vim.lsp.buf.format({ bufnr = bufnr, async = false, timeout_ms = 10000 })
-		end, 'Format')
 		map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
 		map('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
 		map('n', '<leader>ws', vim.lsp.buf.workspace_symbol, 'Workspace symbols')
