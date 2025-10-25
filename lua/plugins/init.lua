@@ -22,3 +22,8 @@ require("plugins.conform")
 require("supermaven-nvim").setup({})
 
 vim.cmd.colorscheme("torte")
+
+vim.api.nvim_set_hl(0, "StatusLineTerm", { fg = "#ffffff", bg = "#222222" })
+vim.api.nvim_set_hl(0, "LineNr", { fg = "#ffffff", bg = "#222222" })
+vim.api.nvim_set_hl(0, "StatusLine", { fg = "#ffffff", bg = "#222222" })
+vim.api.nvim_set_hl(0, "StatusLineNC", { fg = "#ffffff", bg = "#222222" })
