@@ -1,4 +1,0 @@
--- local home = os.getenv('HOME')
--- vim.opt.rtp:append(home .. '/plugins/')
---
--- require('nvpkg')
