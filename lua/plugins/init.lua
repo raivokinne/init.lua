@@ -11,19 +11,24 @@ vim.pack.add({
 	{ src = "https://github.com/saghen/blink.cmp",                        version = vim.version.range("^1") },
 	{ src = "https://github.com/supermaven-inc/supermaven-nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
 })
 
 require("mason").setup()
-require("plugins.treesitter")
+require("plugins.treesitter").setup()
 require("plugins.telescope")
 require("plugins.luasnip")
 require("plugins.blink")
 require("plugins.conform")
 require("supermaven-nvim").setup({})
 
-vim.cmd.colorscheme("torte")
+require("rose-pine").setup({
+	styles = {
+		italic = false,
+		bold = true,
+		transparency = true,
+	}
+})
 
-vim.api.nvim_set_hl(0, "StatusLineTerm", { fg = "#ffffff", bg = "#222222" })
-vim.api.nvim_set_hl(0, "LineNr", { fg = "#ffffff", bg = "#222222" })
-vim.api.nvim_set_hl(0, "StatusLine", { fg = "#ffffff", bg = "#222222" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { fg = "#ffffff", bg = "#222222" })
+vim.cmd.colorscheme("rose-pine")
+

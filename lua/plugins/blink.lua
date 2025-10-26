@@ -7,7 +7,6 @@ require('blink.cmp').setup({
 		['<S-Tab'] = false,
 	},
 	appearance = {
-		use_nvim_cmp_as_default = true,
 		nerd_font_variant = "mono",
 	},
 	completion = {
@@ -21,3 +20,4 @@ require('blink.cmp').setup({
 	},
 	snippets = { preset = 'luasnip' },
 })
+
