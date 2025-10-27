@@ -25,3 +25,4 @@ vim.opt.listchars = {
 	nbsp = '␣',
 	eol = '↲',
 }
+vim.opt.winborder = 'rounded'

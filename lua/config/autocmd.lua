@@ -11,19 +11,18 @@ autocmd("LspAttach", {
 	group = augroup('my.lsp', {}),
 	callback = function(ev)
 		local client = vim.lsp.get_client_by_id(ev.data.client_id)
-		if not client then return end
-		local bufnr = ev.buf
-		local opts = { buffer = bufnr, silent = true }
-
-		if client:supports_method('textDocument/inlayHint') then
-			vim.keymap.set('n', '<leader>th', function()
-				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
-			end, opts)
+		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_completion) then
+			vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+			vim.keymap.set('i', '<C-k>', function()
+				vim.lsp.completion.get()
+			end)
 		end
 		local map = function(keys, func, desc, mode)
 			mode = mode or 'n'
 			vim.keymap.set(mode, keys, func, { buffer = ev.buf, desc = 'LSP: ' .. desc })
 		end
+		map('<leader>f', vim.lsp.buf.format, 'Format')
 		map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 		map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 		map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })

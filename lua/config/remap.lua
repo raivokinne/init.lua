@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 local map = vim.keymap.set
 
+map("n", "-", vim.cmd.Ex)
+
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
@@ -101,3 +103,11 @@ map("n", "<leader>pcc", pack_clean)
 for i = 1, 8 do
 	map({ "n", "t" }, "<Leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
 end
+
+map('n', '<leader>xx', '<Cmd>source %<CR>', { desc = 'Source current file' })
+map('n', '<leader>x', '<Cmd>:.lua<CR>', { desc = 'Lua: execute current line' })
+map('v', '<leader>x', '<Cmd>:lua<CR>', { desc = 'Lua: execute current selection' })
+
+map('n', '<leader>bb', '<C-^>', { desc = 'Switch to alternate buffer' })
+map('n', '<leader>bn', ':bnext<cr>', { desc = 'Next buffer' })
+map('n', '<leader>bp', ':bprevious<cr>', { desc = 'Previous buffer' })
