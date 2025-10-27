@@ -20,18 +20,20 @@ autocmd("LspAttach", {
 				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
 			end, opts)
 		end
-		local function map(modes, lhs, rhs, desc)
-			vim.keymap.set(modes, lhs, rhs, vim.tbl_extend('force', opts, { desc = desc }))
+		local map = function(keys, func, desc, mode)
+			mode = mode or 'n'
+			vim.keymap.set(mode, keys, func, { buffer = ev.buf, desc = 'LSP: ' .. desc })
 		end
-		map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
-		map('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
-		map('n', '<leader>ws', vim.lsp.buf.workspace_symbol, 'Workspace symbols')
-		map('n', '<leader>ca', vim.lsp.buf.code_action, 'Code Actions')
-		map('n', '<leader>vd', vim.diagnostic.open_float, 'Show diagnostic')
-		map('n', '<leader>rr', vim.lsp.buf.references, 'References')
-		map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename')
-		map('n', '<leader>dn', function() vim.diagnostic.jump({ count = 1 }) end, 'Next diagnostic')
-		map('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1 }) end, 'Previous diagnostic')
+		map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+		map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+		map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+		map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+		map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+		map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+		map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+		map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+		map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
+		map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 	end,
 })
 
@@ -57,4 +59,65 @@ autocmd("FileType", {
 			end)
 		end, opts)
 	end,
+})
+
+local function update_plugin(plugin_name)
+	if plugin_name == "" then
+		print("Updating all plugins...")
+		local plugins = vim.pack.get()
+		if vim.tbl_isempty(plugins) then
+			print("No plugins installed to update")
+			return
+		end
+		print("Found " .. #plugins .. " plugins to update:")
+		for i, plugin in ipairs(plugins) do
+			local name = plugin.spec.name or "Unknown Plugin " .. i
+			print("- " .. name)
+		end
+		local choice = vim.fn.confirm(
+			"Update all plugins?",
+			"&Yes\n&No",
+			2
+		)
+		if choice ~= 1 then
+			print("Cancelled")
+			return
+		end
+		vim.pack.update()
+		print("All plugins updated successfully!")
+	else
+		local plugins = vim.pack.get()
+		local found = false
+		for _, plugin in ipairs(plugins) do
+			local name = plugin.spec.name or ""
+			local url = plugin.spec.src or ""
+			if name == plugin_name or url:match(plugin_name) then
+				found = true
+				break
+			end
+		end
+		if not found then
+			print("Plugin not found: " .. plugin_name)
+			print("Use :PackList to see installed plugins")
+			return
+		end
+		local choice = vim.fn.confirm(
+			"Update plugin '" .. plugin_name .. "'?",
+			"&Yes\n&No",
+			2
+		)
+		if choice ~= 1 then
+			print("Cancelled")
+			return
+		end
+		vim.pack.update({ names = { plugin_name } })
+		print("Updated plugin: " .. plugin_name)
+	end
+end
+
+vim.api.nvim_create_user_command("PackUpdate", function(opts)
+	update_plugin(opts.args)
+end, {
+	nargs = "?",
+	desc = "Update plugin(s). No args = update all, or specify plugin name"
 })

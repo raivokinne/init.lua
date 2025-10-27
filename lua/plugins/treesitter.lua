@@ -1,17 +1,12 @@
--- local treesitter = require "nvim-treesitter"
-
 local M = {}
 
 M.setup = function()
   local group = vim.api.nvim_create_augroup("custom-treesitter", { clear = true })
 
-  require("nvim-treesitter").setup {
+  require("nvim-treesitter.configs").setup {
     ensure_install = {
       "core",
       "stable",
-      -- Elixir langs
-      "elixir",
-      "heex",
     },
   }
 
@@ -42,38 +37,6 @@ M.setup = function()
     pattern = "TSUpdate",
     callback = function()
       local parsers = require "nvim-treesitter.parsers"
-
-      -- parsers.lua = {
-      --   tier = 0,
-      --
-      --   ---@diagnostic disable-next-line: missing-fields
-      --   install_info = {
-      --     path = "~/plugins/tree-sitter-lua",
-      --     files = { "src/parser.c", "src/scanner.c" },
-      --   },
-      -- }
-
-      parsers.cram = {
-        tier = 0,
-
-        ---@diagnostic disable-next-line: missing-fields
-        install_info = {
-          path = "~/git/tree-sitter-cram",
-          files = { "src/parser.c" },
-        },
-      }
-
-      parsers.reason = {
-        tier = 0,
-
-        ---@diagnostic disable-next-line: missing-fields
-        install_info = {
-          url = "https://github.com/reasonml-editor/tree-sitter-reason",
-          files = { "src/parser.c", "src/scanner.c" },
-          branch = "master",
-        },
-      }
-
       parsers.blade = {
         tier = 0,
 

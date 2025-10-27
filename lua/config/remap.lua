@@ -1,11 +1,12 @@
 vim.g.mapleader = " "
 local map = vim.keymap.set
-map("n", "-", vim.cmd.Ex)
 
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
+
+map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 map(
 	"n",
@@ -96,55 +97,6 @@ local function pack_clean()
 end
 
 map("n", "<leader>pcc", pack_clean)
-
-local function pack_update()
-	local plugins = vim.pack.get()
-
-	if #plugins == 0 then
-		print("No plugins found.")
-		return
-	end
-
-	local plugins_with_updates = {}
-
-	print("Checking for updates...")
-	for _, plugin in ipairs(plugins) do
-		local path = plugin.path
-		if path then
-			vim.fn.system("git -C " ..
-				vim.fn.shellescape(path) .. " fetch --quiet 2>/dev/null")
-
-			local behind = vim.fn.system("git -C " ..
-				vim.fn.shellescape(path) ..
-				" rev-list HEAD..@{u} --count 2>/dev/null")
-
-			if tonumber(behind) and tonumber(behind) > 0 then
-				table.insert(plugins_with_updates, plugin.spec.name)
-			end
-		end
-	end
-
-	if #plugins_with_updates == 0 then
-		print("All plugins are up to date.")
-		return
-	end
-
-	print("\nPlugins with updates available:")
-	for _, name in ipairs(plugins_with_updates) do
-		print("  - " .. name)
-	end
-
-	local choice = vim.fn.confirm(
-		"Update " .. #plugins_with_updates .. " plugin(s)?",
-		"&Yes\n&No",
-		2
-	)
-
-	if choice == 1 then
-		vim.pack.update(plugins_with_updates)
-	end
-end
-map("n", "<leader>pcu", pack_update)
 
 for i = 1, 8 do
 	map({ "n", "t" }, "<Leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")

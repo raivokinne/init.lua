@@ -14,10 +14,16 @@ require('blink.cmp').setup({
 			auto_show = false,
 			auto_show_delay_ms = 200,
 		},
+		menu = {
+			draw = {
+				columns = {
+					{ "label", "label_description", gap = 1 }, { "kind_icon", "kind" }
+				}
+			}
+		}
 	},
 	sources = {
 		default = { "lsp", "cmdline", "path", "buffer", "snippets" },
 	},
 	snippets = { preset = 'luasnip' },
 })
-

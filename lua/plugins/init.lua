@@ -11,7 +11,12 @@ vim.pack.add({
 	{ src = "https://github.com/saghen/blink.cmp",                        version = vim.version.range("^1") },
 	{ src = "https://github.com/supermaven-inc/supermaven-nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
-	{ src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
+	{ src = "https://github.com/folke/tokyonight.nvim" },
+	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
+	{ src = "https://github.com/stevearc/oil.nvim" },
+	{ src = "https://github.com/tpope/vim-fugitive" },
+	{ src = "https://github.com/echasnovski/mini.nvim" },
+	{ src = "https://github.com/folke/todo-comments.nvim" },
 })
 
 require("mason").setup()
@@ -21,14 +26,22 @@ require("plugins.luasnip")
 require("plugins.blink")
 require("plugins.conform")
 require("supermaven-nvim").setup({})
+require("plugins.oil")
+require("plugins.fugitive")
+require("plugins.mini")
+require("plugins.todo")
 
-require("rose-pine").setup({
+require("tokyonight").setup({
+	style = "night",
+	transparent = true,
 	styles = {
-		italic = false,
-		bold = true,
-		transparency = true,
-	}
+		comments = { italic = false },
+		keywords = { italic = false },
+
+		sidebars = "transparent",
+		floats = "transparent",
+	},
 })
 
-vim.cmd.colorscheme("rose-pine")
+vim.cmd.colorscheme("tokyonight")
 
