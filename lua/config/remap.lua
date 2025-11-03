@@ -1,6 +1,5 @@
 vim.g.mapleader = " "
 local map = vim.keymap.set
-
 map("n", "-", vim.cmd.Ex)
 
 map("v", "J", ":m '>+1<CR>gv=gv")
@@ -9,6 +8,9 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+map('n', "<C-q>", ":copen<CR>", { silent = true })
+map({ "n" }, "<leader>c", "1z=")
+map({ "n" }, "<leader>op", "<Cmd>Open .<CR>", { desc = "Open current directory in Finder." })
 
 map(
 	"n",
@@ -18,20 +20,8 @@ map(
 
 map(
 	"n",
-	"<leader>ea",
-	"oassert.NoError(err, \"\")<Esc>F\";a"
-)
-
-map(
-	"n",
 	"<leader>ef",
 	"oif err != nil {<CR>}<Esc>Olog.Fatalf(\"error: %s\\n\", err.Error())<Esc>jj"
-)
-
-map(
-	"n",
-	"<leader>el",
-	"oif err != nil {<CR>}<Esc>O.logger.Error(\"error\", \"error\", err)<Esc>F.;i"
 )
 
 map('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -47,8 +37,8 @@ map("n", "N", "Nzzzv")
 map("n", "=ap", "ma=ap'a")
 
 map("n", "tt", ":tabnew<CR>")
-map("n", "<C-h>", ":tabnext<CR>")
-map("n", "<C-l>", ":tabprev<CR>")
+map("n", "<S-h>", ":tabnext<CR>")
+map("n", "<S-l>", ":tabprev<CR>")
 map("n", "tc", ":tabclose<CR>")
 
 map("x", "<leader>p", [["_dP]])
@@ -68,10 +58,6 @@ map("n", "<C-k>", "<cmd>cnext<CR>zz")
 map("n", "<C-j>", "<cmd>cprev<CR>zz")
 map("n", "<leader>k", "<cmd>lnext<CR>zz")
 map("n", "<leader>j", "<cmd>lprev<CR>zz")
-
-map("n", "<leader><leader>", function()
-	vim.cmd("so")
-end)
 
 local function pack_clean()
 	local active_plugins = {}
@@ -100,9 +86,10 @@ end
 
 map("n", "<leader>pcc", pack_clean)
 
-for i = 1, 8 do
-	map({ "n", "t" }, "<Leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
-end
+-- for i = 1, 8 do
+-- 	map({ "n", "t" }, "<Leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
+-- end
+
 
 map('n', '<leader>xx', '<Cmd>source %<CR>', { desc = 'Source current file' })
 map('n', '<leader>x', '<Cmd>:.lua<CR>', { desc = 'Lua: execute current line' })
