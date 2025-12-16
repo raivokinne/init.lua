@@ -18,7 +18,6 @@ require('blink.cmp').setup({
 	},
 	sources = {
 		default = { "lsp", "cmdline", "path", "buffer", "snippets" },
-		providers = {},
 	},
 	snippets = { preset = 'luasnip' },
 })
